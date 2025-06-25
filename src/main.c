@@ -6,17 +6,20 @@
 /*   By: smishos <smishos@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 16:00:04 by amakinen          #+#    #+#             */
-/*   Updated: 2025/06/25 19:08:31 by smishos          ###   ########.fr       */
+/*   Updated: 2025/06/25 19:25:31 by smishos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include "MLX42/MLX42.h"
 
 typedef struct s_cub3d {
 	mlx_t		*mlx;
 	mlx_image_t *render;
+	int			width;
+	int			height;
 	float		player_x;
 	float		player_y;
 	float		player_facing;
@@ -83,17 +86,17 @@ void	render(t_cub3d *cub3d)
 	int	y;
 
 	x = 0;
-	while (x < (int)cub3d->render->width)
+	while (x < (int)cub3d->width)
 	{
-		float dx = -(cub3d->render->width * 0.5) + x + 0.5;
-		float dy = -(cub3d->render->width * 0.5);
+		float dx = -(cub3d->width * 0.5) + x + 0.5;
+		float dy = -(cub3d->width * 0.5);
 		float t = cast(cub3d->player_x, cub3d->player_y, dx, dy);
-		float d = t * cub3d->render->width;
-		int height = 0.5 * cub3d->render->width / d;
+		float d = t * cub3d->width;
+		int height = 0.5 * cub3d->width / d;
 		y = 0;
-		while (y < (int)cub3d->render->height)
+		while (y < (int)cub3d->height)
 		{
-			int horizon = cub3d->render->height / 2;
+			int horizon = cub3d->height / 2;
 			if (y > horizon - height && y < horizon + height)
 				mlx_put_pixel(cub3d->render, x, y, 0xff0000ff);
 			else if (y < horizon)
@@ -108,26 +111,47 @@ void	render(t_cub3d *cub3d)
 
 bool image_setup(t_cub3d *cub3d)
 {
-	cub3d->render = mlx_new_image(cub3d->mlx, cub3d->mlx->width, cub3d->mlx->height);
+	if (cub3d->render
+		&& cub3d->width == cub3d->mlx->width
+		&& cub3d->height == cub3d->mlx->height)
+		return (true);
+	if (cub3d->render)
+		mlx_delete_image(cub3d->mlx, cub3d->render);
+	cub3d->width = cub3d->mlx->width;
+	cub3d->height = cub3d->mlx->height;
+	cub3d->render = mlx_new_image(cub3d->mlx, cub3d->width, cub3d->height);
 	if (!cub3d->render)
 		return (false);
 	if (mlx_image_to_window(cub3d->mlx, cub3d->render, 0, 0) < 0)
 		return (false);
-	render(cub3d);
 	return (true);
+}
+
+void	loop_hook(void *param)
+{
+	t_cub3d	*cub3d;
+
+	cub3d = param;
+	if (!image_setup(cub3d))
+	{
+		mlx_close_window(cub3d->mlx);
+		return ;
+	}
+	render(cub3d);
 }
 
 int	main(void)
 {
 	t_cub3d cub3d;
 
+	cub3d.render = NULL;
 	cub3d.player_x = 1.5;
 	cub3d.player_y = 2.8;
 	cub3d.mlx = mlx_init(800, 1200, "fdf", true);
 	if (!cub3d.mlx)
 		return (1);
-	if (image_setup(&cub3d))
-		mlx_loop(cub3d.mlx);
+	mlx_loop_hook(cub3d.mlx, loop_hook, &cub3d);
+	mlx_loop(cub3d.mlx);
 	if (cub3d.render)
 		mlx_delete_image(cub3d.mlx, cub3d.render);
 	mlx_terminate(cub3d.mlx);
