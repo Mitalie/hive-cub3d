@@ -8,7 +8,7 @@
 #include "color.h"
 #include "vec2.h"
 
-static uint32_t	wall_color(t_side side, float pos)
+static uint32_t	wall_color(t_side side, float pos, float ypos)
 {
 	uint32_t	base;
 
@@ -23,7 +23,7 @@ static uint32_t	wall_color(t_side side, float pos)
 		base = 0xc000ffff;
 	else
 		return (0xff);
-	return (color_interp(0xff, base, pos));
+	return (color_interp(color_interp(0xff, 0xffffffff, ypos), base, pos));
 }
 
 static void	render_column(t_cub3d *cub3d, float tan_vfov, int col, t_hit *hit)
@@ -39,7 +39,8 @@ static void	render_column(t_cub3d *cub3d, float tan_vfov, int col, t_hit *hit)
 	{
 		tan_vert = -1 * tan_vfov * ((row + 0.5) / cub3d->height - 0.5);
 		if (tan_vert > -tan_wall_height && tan_vert < tan_wall_height)
-			color = wall_color(hit->side, hit->position_in_tile);
+			color = wall_color(hit->side, hit->position_in_tile,
+					tan_vert / tan_wall_height * 0.5 + 0.5);
 		else if (tan_vert > 0)
 			color = 0xffffff;
 		else
