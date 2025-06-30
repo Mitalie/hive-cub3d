@@ -6,7 +6,7 @@
 #    By: amakinen <amakinen@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/25 16:02:09 by amakinen          #+#    #+#              #
-#    Updated: 2025/06/25 16:08:10 by amakinen         ###   ########.fr        #
+#    Updated: 2025/06/30 17:00:11 by amakinen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ $(MLX42): mlx42-make
 mlx42-clean:
 	rm -rf mlx42/build
 clean: mlx42-clean
+fclean: mlx42-clean
 .PHONY: mlx42-clean mlx42-make
 
 # Project targets
