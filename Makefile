@@ -12,6 +12,7 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	color.c \
 	input/input.c \
 	input/input_funcs.c \
+	render.c \
 )
 
 # MLX42
