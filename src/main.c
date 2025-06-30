@@ -3,16 +3,8 @@
 #include <stddef.h>
 #include "MLX42/MLX42.h"
 
-typedef struct s_cub3d
-{
-	mlx_t		*mlx;
-	mlx_image_t	*render;
-	int			width;
-	int			height;
-	float		player_x;
-	float		player_y;
-	float		player_facing;
-}	t_cub3d;
+#include "cub3d.h"
+#include "input.h"
 
 static const char	g_grid[] = {
 	'1', '1', '1', '1',
@@ -116,29 +108,12 @@ bool	image_setup(t_cub3d *cub3d)
 	return (true);
 }
 
-void	key_hooks(mlx_key_data_t data, void *param)
+void	key_hook(mlx_key_data_t data, void *param)
 {
 	t_cub3d	*cub3d;
-	float	x;
-	float	y;
 
 	cub3d = param;
-	x = cub3d->player_x;
-	y = cub3d->player_y;
-	if (data.key == MLX_KEY_ESCAPE && data.action == MLX_RELEASE)
-		mlx_close_window(cub3d->mlx);
-	else if ((data.key == MLX_KEY_UP && data.action == MLX_PRESS)
-		|| (data.key == MLX_KEY_W && data.action == MLX_PRESS))
-		cub3d->player_y += 0.1;
-	else if ((data.key == MLX_KEY_DOWN && data.action == MLX_PRESS)
-		|| (data.key == MLX_KEY_S && data.action == MLX_PRESS))
-		cub3d->player_y -= 0.1;
-	else if ((data.key == MLX_KEY_LEFT && data.action == MLX_PRESS)
-		|| (data.key == MLX_KEY_A && data.action == MLX_PRESS))
-		cub3d->player_x -= 0.1;
-	else if ((data.key == MLX_KEY_RIGHT && data.action == MLX_PRESS)
-		|| (data.key == MLX_KEY_D && data.action == MLX_PRESS))
-		cub3d->player_x += 0.1;
+	input_key(cub3d, data);
 }
 
 void	loop_hook(void *param)
@@ -151,6 +126,7 @@ void	loop_hook(void *param)
 		mlx_close_window(cub3d->mlx);
 		return ;
 	}
+	input_timed(cub3d);
 	render(cub3d);
 }
 
@@ -165,7 +141,7 @@ int	main(void)
 	if (!cub3d.mlx)
 		return (1);
 	mlx_loop_hook(cub3d.mlx, loop_hook, &cub3d);
-	mlx_key_hook(cub3d.mlx, key_hooks, &cub3d);
+	mlx_key_hook(cub3d.mlx, key_hook, &cub3d);
 	mlx_loop(cub3d.mlx);
 	if (cub3d.render)
 		mlx_delete_image(cub3d.mlx, cub3d.render);
