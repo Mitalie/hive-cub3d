@@ -1,29 +1,18 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: smishos <smishos@student.hive.fi>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/25 16:00:04 by amakinen          #+#    #+#             */
-/*   Updated: 2025/06/25 19:36:32 by smishos          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include "MLX42/MLX42.h"
 
-typedef struct s_cub3d {
+typedef struct s_cub3d
+{
 	mlx_t		*mlx;
-	mlx_image_t *render;
+	mlx_image_t	*render;
 	int			width;
 	int			height;
 	float		player_x;
 	float		player_y;
 	float		player_facing;
-} t_cub3d;
+}	t_cub3d;
 
 static const char	g_grid[] = {
 	'1', '1', '1', '1',
@@ -109,7 +98,7 @@ void	render(t_cub3d *cub3d)
 	}
 }
 
-bool image_setup(t_cub3d *cub3d)
+bool	image_setup(t_cub3d *cub3d)
 {
 	if (cub3d->render
 		&& cub3d->width == cub3d->mlx->width
@@ -129,9 +118,9 @@ bool image_setup(t_cub3d *cub3d)
 
 void	key_hooks(mlx_key_data_t data, void *param)
 {
-	t_cub3d *cub3d;
-	float		x;
-	float		y;
+	t_cub3d	*cub3d;
+	float	x;
+	float	y;
 
 	cub3d = param;
 	x = cub3d->player_x;
@@ -152,7 +141,6 @@ void	key_hooks(mlx_key_data_t data, void *param)
 		cub3d->player_x += 0.1;
 }
 
-
 void	loop_hook(void *param)
 {
 	t_cub3d	*cub3d;
@@ -168,7 +156,7 @@ void	loop_hook(void *param)
 
 int	main(void)
 {
-	t_cub3d cub3d;
+	t_cub3d	cub3d;
 
 	cub3d.render = NULL;
 	cub3d.player_x = 1.5;
