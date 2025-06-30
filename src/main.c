@@ -4,6 +4,7 @@
 #include "MLX42/MLX42.h"
 
 #include "cast.h"
+#include "color.h"
 #include "cub3d.h"
 #include "input.h"
 #include "vec2.h"
@@ -21,7 +22,6 @@ static const char	g_test_map[TEST_MAP_HEIGHT * TEST_MAP_WIDTH] = {
 uint32_t	wall_color(t_side side, float pos)
 {
 	uint32_t	base;
-	uint32_t	out;
 
 	pos = pos - floorf(pos);
 	if (side == HIT_NORTH)
@@ -34,11 +34,7 @@ uint32_t	wall_color(t_side side, float pos)
 		base = 0xc000ffff;
 	else
 		return (0xff);
-	out = 0xff;
-	out |= (uint32_t)((base >> 24 & 0xff) * pos) << 24;
-	out |= (uint32_t)((base >> 16 & 0xff) * pos) << 16;
-	out |= (uint32_t)((base >> 8 & 0xff) * pos) << 8;
-	return (out);
+	return (color_interp(0xff, base, pos));
 }
 
 void	render_column(t_cub3d *cub3d, float tan_vfov, int col, t_hit *hit)
