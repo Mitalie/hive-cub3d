@@ -11,6 +11,7 @@ typedef struct s_cub3d
 	mlx_image_t	*render;
 	int			width;
 	int			height;
+	float		hfov_deg;
 	t_vec2		player;
 	float		player_facing;
 }	t_cub3d;

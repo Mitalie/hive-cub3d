@@ -119,34 +119,47 @@ uint32_t	wall_color(t_side side, float pos)
 	return (out);
 }
 
-void	render(t_cub3d *cub3d)
+void	render_column(t_cub3d *cub3d, float tan_vfov, int col, t_hit *hit)
 {
-	int		x;
-	int		y;
-	t_vec2	direction;
-	t_hit	hit;
-	int		height;
+	int			row;
+	float		tan_vert;
+	float		tan_wall_height;
+	uint32_t	color;
 
-	x = 0;
-	direction.y = -(cub3d->width * 0.5);
-	while (x < (int)cub3d->width)
+	tan_wall_height = 0.5 / hit->distance;
+	row = 0;
+	while (row < cub3d->height)
 	{
-		direction.x = -(cub3d->width * 0.5) + x + 0.5;
+		tan_vert = -1 * tan_vfov * ((row + 0.5) / cub3d->height - 0.5);
+		if (tan_vert > -tan_wall_height && tan_vert < tan_wall_height)
+			color = wall_color(hit->side, hit->position_in_tile);
+		else if (tan_vert > 0)
+			color = 0xffffff;
+		else
+			color = 0x00c060ff;
+		mlx_put_pixel(cub3d->render, col, row, color);
+		row++;
+	}
+}
+
+void	render_view(t_cub3d *cub3d)
+{
+	float	tan_hfov;
+	float	tan_vfov;
+	t_vec2	direction;
+	int		col;
+	t_hit	hit;
+
+	tan_hfov = 2 * tan(cub3d->hfov_deg / 2 * 3.1415926535 / 180);
+	tan_vfov = tan_hfov * cub3d->height / cub3d->width;
+	direction.y = -1;
+	col = 0;
+	while (col < cub3d->width)
+	{
+		direction.x = tan_hfov * ((col + 0.5) / cub3d->width - 0.5);
 		cast(cub3d->player, direction, &hit);
-		height = 0.5 / hit.distance;
-		y = 0;
-		while (y < (int)cub3d->height)
-		{
-			int horizon = cub3d->height / 2;
-			if (y > horizon - height && y < horizon + height)
-				mlx_put_pixel(cub3d->render, x, y, wall_color(hit.side, hit.position_in_tile));
-			else if (y < horizon)
-				mlx_put_pixel(cub3d->render, x, y, 0xffffff);
-			else
-				mlx_put_pixel(cub3d->render, x, y, 0x00c060ff);
-			y++;
-		}
-		x++;
+		render_column(cub3d, tan_vfov, col, &hit);
+		col++;
 	}
 }
 
@@ -187,7 +200,7 @@ void	loop_hook(void *param)
 		return ;
 	}
 	input_timed(cub3d);
-	render(cub3d);
+	render_view(cub3d);
 }
 
 int	main(void)
@@ -195,6 +208,7 @@ int	main(void)
 	t_cub3d	cub3d;
 
 	cub3d.render = NULL;
+	cub3d.hfov_deg = 90;
 	cub3d.player.x = 1.5;
 	cub3d.player.y = 2.8;
 	cub3d.mlx = mlx_init(800, 1200, "fdf", true);
