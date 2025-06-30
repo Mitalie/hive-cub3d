@@ -7,14 +7,15 @@
 #include "input.h"
 #include "vec2.h"
 
-static const char	g_grid[] = {
+#define TEST_MAP_HEIGHT 4
+#define TEST_MAP_WIDTH 4
+
+static const char	g_test_map[TEST_MAP_HEIGHT * TEST_MAP_WIDTH] = {
 	'1', '1', '1', '1',
 	'1', '0', '0', '1',
 	'1', '0', '1', '1',
 	'1', '1', '1', '1',
 };
-
-static const int	g_width = 4;
 
 float	initial_distance_to_grid(float pos, float direction)
 {
@@ -41,9 +42,9 @@ typedef struct s_hit
 	t_side	side;
 }	t_hit;
 
-bool	check_hit_x(t_vec2 pos, t_vec2 dir, t_vec2 distance_to_grid, t_hit *out)
+bool	check_hit_x(t_cub3d *cub3d, t_vec2 pos, t_vec2 dir, t_vec2 distance_to_grid, t_hit *out)
 {
-	if (g_grid[(int) pos.y * g_width + (int) pos.x] == '1')
+	if (cub3d->map_array[(int) pos.y * cub3d->map_width + (int) pos.x] == '1')
 	{
 		out->distance = distance_to_grid.x;
 		out->side = (dir.x > 0) * HIT_WEST + (dir.x <= 0) * HIT_EAST;
@@ -52,9 +53,9 @@ bool	check_hit_x(t_vec2 pos, t_vec2 dir, t_vec2 distance_to_grid, t_hit *out)
 	return (false);
 }
 
-bool	check_hit_y(t_vec2 pos, t_vec2 dir, t_vec2 distance_to_grid, t_hit *out)
+bool	check_hit_y(t_cub3d *cub3d, t_vec2 pos, t_vec2 dir, t_vec2 distance_to_grid, t_hit *out)
 {
-	if (g_grid[(int) pos.y * g_width + (int) pos.x] == '1')
+	if (cub3d->map_array[(int) pos.y * cub3d->map_width + (int) pos.x] == '1')
 	{
 		out->distance = distance_to_grid.y;
 		out->side = (dir.y > 0) * HIT_NORTH + (dir.y <= 0) * HIT_SOUTH;
@@ -67,7 +68,7 @@ bool	check_hit_y(t_vec2 pos, t_vec2 dir, t_vec2 distance_to_grid, t_hit *out)
 	Distance is not a two-dimensional vector, but rather separate distances to
 	next vertical or horizontal grid line.
 */
-void	cast(t_vec2 pos, t_vec2 dir, t_hit *out)
+void	cast(t_cub3d *cub3d, t_vec2 pos, t_vec2 dir, t_hit *out)
 {
 	const t_vec2	start = pos;
 	t_vec2			distance_to_grid;
@@ -79,14 +80,14 @@ void	cast(t_vec2 pos, t_vec2 dir, t_hit *out)
 		if (distance_to_grid.x < distance_to_grid.y)
 		{
 			pos.x += dir.x / fabsf(dir.x);
-			if (check_hit_x(pos, dir, distance_to_grid, out))
+			if (check_hit_x(cub3d, pos, dir, distance_to_grid, out))
 				break ;
 			distance_to_grid.x += 1 / fabsf(dir.x);
 		}
 		else
 		{
 			pos.y += dir.y / fabsf(dir.y);
-			if (check_hit_y(pos, dir, distance_to_grid, out))
+			if (check_hit_y(cub3d, pos, dir, distance_to_grid, out))
 				break ;
 			distance_to_grid.y += 1 / fabsf(dir.y);
 		}
@@ -157,7 +158,7 @@ void	render_view(t_cub3d *cub3d)
 	while (col < cub3d->width)
 	{
 		direction.x = tan_hfov * ((col + 0.5) / cub3d->width - 0.5);
-		cast(cub3d->player, direction, &hit);
+		cast(cub3d, cub3d->player, direction, &hit);
 		render_column(cub3d, tan_vfov, col, &hit);
 		col++;
 	}
@@ -208,6 +209,9 @@ int	main(void)
 	t_cub3d	cub3d;
 
 	cub3d.render = NULL;
+	cub3d.map_height = TEST_MAP_HEIGHT;
+	cub3d.map_width = TEST_MAP_WIDTH;
+	cub3d.map_array = g_test_map;
 	cub3d.hfov_deg = 90;
 	cub3d.player.x = 1.5;
 	cub3d.player.y = 2.8;

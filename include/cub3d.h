@@ -9,6 +9,9 @@ typedef struct s_cub3d
 {
 	mlx_t		*mlx;
 	mlx_image_t	*render;
+	const char	*map_array;
+	int			map_height;
+	int			map_width;
 	int			width;
 	int			height;
 	float		hfov_deg;
