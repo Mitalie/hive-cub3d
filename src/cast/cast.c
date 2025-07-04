@@ -13,7 +13,7 @@ static float	cast_initial_distance_to_grid(float pos, float direction)
 	else if (direction > 0)
 		return ((ceilf(pos) - pos) / direction);
 	else
-		return ((floor(pos) - pos) / direction);
+		return ((floorf(pos) - pos) / direction);
 }
 
 static bool	cast_check_wall(t_cub3d *cub3d, t_cast_state *state)

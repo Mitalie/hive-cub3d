@@ -1,8 +1,10 @@
 #include "input_internal.h"
 
+#include <math.h>
 #include "MLX42/MLX42.h"
 
 #include "cub3d.h"
+#include "vec2.h"
 
 void	input_simple_action(t_cub3d *cub3d, int arg)
 {
@@ -11,21 +13,41 @@ void	input_simple_action(t_cub3d *cub3d, int arg)
 }
 
 /*
-	FIXME: account for facing direction
+	First set up the move vector as if facing north, then rotate it based on
+	actual facing direction and apply the rotated movement to player position.
 */
 void	input_move(t_cub3d *cub3d, int arg, float time)
 {
 	float	speed;
 	float	distance;
+	t_vec2	move;
 
 	speed = 1.0;
 	distance = speed * time;
+	move.x = 0;
+	move.y = 0;
 	if (arg == INPUT_FORWARD)
-		cub3d->player.y -= distance;
+		move.y = -distance;
 	if (arg == INPUT_BACKWARD)
-		cub3d->player.y += distance;
+		move.y = distance;
 	if (arg == INPUT_LEFT)
-		cub3d->player.x -= distance;
+		move.x = -distance;
 	if (arg == INPUT_RIGHT)
-		cub3d->player.x += distance;
+		move.x = distance;
+	move = vec2_rotate(move, cub3d->player_facing);
+	cub3d->player.x += move.x;
+	cub3d->player.y += move.y;
+}
+
+void	input_turn(t_cub3d *cub3d, int arg, float time)
+{
+	float	turn_speed;
+	float	angle;
+
+	turn_speed = 90.0;
+	angle = turn_speed * time;
+	if (arg == INPUT_TURN_LEFT)
+		cub3d->player_facing = fmodf(cub3d->player_facing - angle, 360);
+	if (arg == INPUT_TURN_RIGHT)
+		cub3d->player_facing = fmodf(cub3d->player_facing + angle, 360);
 }
