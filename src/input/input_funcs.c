@@ -21,11 +21,11 @@ void	input_move(t_cub3d *cub3d, int arg, float time)
 	speed = 1.0;
 	distance = speed * time;
 	if (arg == INPUT_FORWARD)
-		cub3d->player_y -= distance;
+		cub3d->player.y -= distance;
 	if (arg == INPUT_BACKWARD)
-		cub3d->player_y += distance;
+		cub3d->player.y += distance;
 	if (arg == INPUT_LEFT)
-		cub3d->player_x -= distance;
+		cub3d->player.x -= distance;
 	if (arg == INPUT_RIGHT)
-		cub3d->player_x += distance;
+		cub3d->player.x += distance;
 }

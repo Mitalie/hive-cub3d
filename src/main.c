@@ -1,94 +1,20 @@
-#include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include "MLX42/MLX42.h"
 
 #include "cub3d.h"
 #include "input.h"
+#include "render.h"
 
-static const char	g_grid[] = {
+#define TEST_MAP_HEIGHT 4
+#define TEST_MAP_WIDTH 4
+
+static const char	g_test_map[TEST_MAP_HEIGHT * TEST_MAP_WIDTH] = {
 	'1', '1', '1', '1',
 	'1', '0', '0', '1',
 	'1', '0', '1', '1',
 	'1', '1', '1', '1',
 };
-
-static const int	g_width = 4;
-
-float	cast(float sx, float sy, float dx, float dy)
-{
-	float	tx;
-	float	ty;
-	int		x;
-	int		y;
-
-	x = sx;
-	y = sy;
-	if (dx == 0)
-		tx = INFINITY;
-	else if (dx > 0)
-		tx = (ceilf(sx) - sx) / dx;
-	else
-		tx = (floor(sx) - sx) / dx;
-	if (dy == 0)
-		ty = INFINITY;
-	else if (dy > 0)
-		ty = (ceilf(sy) - sy) / dy;
-	else
-		ty = (floor(sy) - sy) / dy;
-	while (1)
-	{
-		if (tx < ty) // advance in X direction
-		{
-			if (dx > 0)
-				x++;
-			else
-				x--;
-			if (g_grid[y * g_width + x] == '1')
-				return (tx);
-			tx += 1 / fabsf(dx);
-		}
-		else
-		{
-			if (dy > 0)
-				y++;
-			else
-				y--;
-			if (g_grid[y * g_width + x] == '1')
-				return (ty);
-			ty += 1 / fabsf(dy);
-		}
-	}
-}
-
-void	render(t_cub3d *cub3d)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	while (x < (int)cub3d->width)
-	{
-		float dx = -(cub3d->width * 0.5) + x + 0.5;
-		float dy = -(cub3d->width * 0.5);
-		float t = cast(cub3d->player_x, cub3d->player_y, dx, dy);
-		float d = t * cub3d->width;
-		int height = 0.5 * cub3d->width / d;
-		y = 0;
-		while (y < (int)cub3d->height)
-		{
-			int horizon = cub3d->height / 2;
-			if (y > horizon - height && y < horizon + height)
-				mlx_put_pixel(cub3d->render, x, y, 0xff0000ff);
-			else if (y < horizon)
-				mlx_put_pixel(cub3d->render, x, y, 0xffffff);
-			else
-				mlx_put_pixel(cub3d->render, x, y, 0xffff00ff);
-			y++;
-		}
-		x++;
-	}
-}
 
 bool	image_setup(t_cub3d *cub3d)
 {
@@ -127,7 +53,7 @@ void	loop_hook(void *param)
 		return ;
 	}
 	input_timed(cub3d);
-	render(cub3d);
+	render_view(cub3d);
 }
 
 int	main(void)
@@ -135,8 +61,12 @@ int	main(void)
 	t_cub3d	cub3d;
 
 	cub3d.render = NULL;
-	cub3d.player_x = 1.5;
-	cub3d.player_y = 2.8;
+	cub3d.map_height = TEST_MAP_HEIGHT;
+	cub3d.map_width = TEST_MAP_WIDTH;
+	cub3d.map_array = g_test_map;
+	cub3d.hfov_deg = 90;
+	cub3d.player.x = 1.5;
+	cub3d.player.y = 2.8;
 	cub3d.mlx = mlx_init(800, 1200, "fdf", true);
 	if (!cub3d.mlx)
 		return (1);

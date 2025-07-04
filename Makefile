@@ -8,8 +8,11 @@ INCDIRS := include
 # Project files
 SRCS := $(addprefix $(SRCDIR)/,\
 	main.c \
+	cast/cast.c \
+	color.c \
 	input/input.c \
 	input/input_funcs.c \
+	render.c \
 )
 
 # MLX42
