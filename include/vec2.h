@@ -7,4 +7,6 @@ typedef struct s_vec2
 	float	y;
 }	t_vec2;
 
+t_vec2	vec2_rotate(t_vec2 v, float degrees);
+
 #endif

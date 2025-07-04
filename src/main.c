@@ -67,6 +67,7 @@ int	main(void)
 	cub3d.hfov_deg = 90;
 	cub3d.player.x = 1.5;
 	cub3d.player.y = 2.8;
+	cub3d.player_facing = 0;
 	cub3d.mlx = mlx_init(800, 1200, "fdf", true);
 	if (!cub3d.mlx)
 		return (1);

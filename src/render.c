@@ -60,11 +60,12 @@ void	render_view(t_cub3d *cub3d)
 
 	tan_hfov = 2 * tan(cub3d->hfov_deg / 2 * 3.1415926535 / 180);
 	tan_vfov = tan_hfov * cub3d->height / cub3d->width;
-	direction.y = -1;
 	col = 0;
 	while (col < cub3d->width)
 	{
+		direction.y = -1;
 		direction.x = tan_hfov * ((col + 0.5) / cub3d->width - 0.5);
+		direction = vec2_rotate(direction, cub3d->player_facing);
 		cast(cub3d, cub3d->player, direction, &hit);
 		render_column(cub3d, tan_vfov, col, &hit);
 		col++;

@@ -13,6 +13,7 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	input/input.c \
 	input/input_funcs.c \
 	render.c \
+	vec2.c \
 )
 
 # MLX42
