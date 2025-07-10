@@ -12,7 +12,9 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	color.c \
 	input/input.c \
 	input/input_funcs.c \
+	map/map_load.c \
 	render.c \
+	util/util_mem.c \
 	vec2.c \
 )
 
