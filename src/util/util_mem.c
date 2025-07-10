@@ -2,6 +2,20 @@
 
 #include <stdlib.h>
 
+int	util_memcmp(const void *a, const void *b, size_t n)
+{
+	int					cmp;
+	const unsigned char	*a_c;
+	const unsigned char	*b_c;
+
+	cmp = 0;
+	a_c = a;
+	b_c = b;
+	while (n-- && cmp == 0)
+		cmp = (*a_c++) - (*b_c++);
+	return (cmp);
+}
+
 void	util_memcpy(void *dst, const void *src, size_t n)
 {
 	char		*dst_c;

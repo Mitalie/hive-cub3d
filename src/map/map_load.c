@@ -1,4 +1,5 @@
 #include "map.h"
+#include "map_internal.h"
 
 #include <fcntl.h>
 #include <stdbool.h>
@@ -76,16 +77,6 @@ static char	*map_load_file(const char *path)
 	return (buf);
 }
 
-/*
-	TODO: implement
-*/
-static bool	map_parse(t_map *map, char *file_data)
-{
-	(void)map;
-	(void)file_data;
-	return (false);
-}
-
 bool	map_load(t_map *map, const char *path)
 {
 	char	*file_data;
@@ -94,6 +85,12 @@ bool	map_load(t_map *map, const char *path)
 	file_data = map_load_file(path);
 	if (!file_data)
 		return (false);
+	map->wall_north = NULL;
+	map->wall_south = NULL;
+	map->wall_east = NULL;
+	map->wall_west = NULL;
+	map->color_ceil = 0;
+	map->color_floor = 0;
 	success = map_parse(map, file_data);
 	free(file_data);
 	return (success);
