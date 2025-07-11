@@ -14,6 +14,7 @@ bool	util_parse_uint8(char **str, uint8_t *value)
 
 	if (!util_isdigit(**str))
 		return (false);
+	*value = 0;
 	while (util_isdigit(**str))
 	{
 		digit = *(*str)++ - '0';

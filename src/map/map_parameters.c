@@ -11,6 +11,7 @@
 static bool	map_parse_wall(mlx_texture_t **wall_out, char **file_data)
 {
 	char	*wallfile_start;
+	char	wallfile_end_tmp;
 
 	*file_data += 2;
 	if (**file_data != ' ' && **file_data != '\t')
@@ -21,9 +22,10 @@ static bool	map_parse_wall(mlx_texture_t **wall_out, char **file_data)
 	while (**file_data != ' ' && **file_data != '\t'
 		&& **file_data != '\n' && **file_data != '\0')
 		(*file_data)++;
+	wallfile_end_tmp = **file_data;
 	**file_data = '\0';
-	(*file_data)++;
 	*wall_out = mlx_load_png(wallfile_start);
+	**file_data = wallfile_end_tmp;
 	if (*wall_out == NULL)
 		return (false);
 	return (true);
@@ -60,13 +62,13 @@ static bool	map_parse_color(uint32_t *color_out, char **file_data)
 
 bool	map_parse_parameter(t_map *map, char **file_data)
 {
-	if (util_memcmp(*file_data, "NO", 2))
+	if (util_memcmp(*file_data, "NO", 2) == 0)
 		return (map_parse_wall(&map->wall_north, file_data));
-	else if (util_memcmp(*file_data, "SO", 2))
+	else if (util_memcmp(*file_data, "SO", 2) == 0)
 		return (map_parse_wall(&map->wall_south, file_data));
-	else if (util_memcmp(*file_data, "EA", 2))
+	else if (util_memcmp(*file_data, "EA", 2) == 0)
 		return (map_parse_wall(&map->wall_east, file_data));
-	else if (util_memcmp(*file_data, "WE", 2))
+	else if (util_memcmp(*file_data, "WE", 2) == 0)
 		return (map_parse_wall(&map->wall_west, file_data));
 	else if (**file_data == 'C')
 		return (map_parse_color(&map->color_ceil, file_data));
