@@ -3,15 +3,14 @@
 
 # include "MLX42/MLX42.h"
 
+# include "map.h"
 # include "vec2.h"
 
 typedef struct s_cub3d
 {
 	mlx_t		*mlx;
 	mlx_image_t	*render;
-	const char	*map_array;
-	int			map_height;
-	int			map_width;
+	t_map		map;
 	int			width;
 	int			height;
 	float		hfov_deg;
