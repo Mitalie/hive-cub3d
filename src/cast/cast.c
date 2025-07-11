@@ -6,14 +6,23 @@
 
 #include "cub3d.h"
 
+/*
+	If position happens to be *exactly* on grid line, ceil(pos) finds that same
+	line instead of the next one over. Special case this to return the correct
+	distance.
+*/
 static float	cast_initial_distance_to_grid(float pos, float direction)
 {
 	if (direction == 0)
 		return (INFINITY);
 	else if (direction > 0)
+	{
+		if ((ceilf(pos) == pos))
+			return (1 / direction);
 		return ((ceilf(pos) - pos) / direction);
+	}
 	else
-		return ((floorf(pos) - pos) / direction);
+		return ((pos - floorf(pos)) / -direction);
 }
 
 static bool	cast_check_wall(t_cub3d *cub3d, t_cast_state *state)
