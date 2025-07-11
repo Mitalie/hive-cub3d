@@ -91,6 +91,7 @@ bool	map_load(t_map *map, const char *path)
 	map->wall_west = NULL;
 	map->color_ceil = 0;
 	map->color_floor = 0;
+	map->player_start = '\0';
 	success = map_parse(map, file_data);
 	free(file_data);
 	return (success);

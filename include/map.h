@@ -16,6 +16,9 @@ typedef struct s_map
 	mlx_texture_t	*wall_west;
 	uint32_t		color_floor;
 	uint32_t		color_ceil;
+	uint32_t		player_x;
+	uint32_t		player_y;
+	char			player_start;
 }	t_map;
 
 bool	map_load(t_map *map, const char *path);
