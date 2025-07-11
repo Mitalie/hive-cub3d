@@ -7,4 +7,7 @@
 
 bool	map_parse(t_map *map, char *file_data);
 
+bool	map_parse_parameter(t_map *map, char **file_data);
+bool	map_verify_parameters(t_map *map);
+
 #endif
