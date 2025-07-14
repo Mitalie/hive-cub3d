@@ -5,25 +5,30 @@
 #include "MLX42/MLX42.h"
 
 #include "cast.h"
-#include "color.h"
 #include "vec2.h"
 
-static uint32_t	wall_color(t_side side, float pos, float ypos)
+static uint32_t	wall_color(t_cub3d *cub3d, t_side side, float xpos, float ypos)
 {
-	uint32_t	base;
+	mlx_texture_t	*tex;
+	uint32_t		x;
+	uint32_t		y;
+	uint8_t			*texel;
 
-	pos = pos - floorf(pos);
+	xpos = xpos - floorf(xpos);
 	if (side == HIT_NORTH)
-		base = 0xffff00ff;
+		tex = cub3d->map.wall_north;
 	else if (side == HIT_SOUTH)
-		base = 0xc03f3fff;
+		tex = cub3d->map.wall_south;
 	else if (side == HIT_WEST)
-		base = 0xc06000ff;
+		tex = cub3d->map.wall_west;
 	else if (side == HIT_EAST)
-		base = 0xc000ffff;
+		tex = cub3d->map.wall_east;
 	else
 		return (0xff);
-	return (color_interp(color_interp(0xff, 0xffffffff, ypos), base, pos));
+	x = tex->width * xpos;
+	y = tex->height - tex->height * ypos;
+	texel = &tex->pixels[tex->bytes_per_pixel * (y * tex->width + x)];
+	return (texel[0] << 24 | texel[1] << 16 | texel[2] << 8 | 0xff);
 }
 
 static void	render_column(t_cub3d *cub3d, float tan_vfov, int col, t_hit *hit)
@@ -39,12 +44,12 @@ static void	render_column(t_cub3d *cub3d, float tan_vfov, int col, t_hit *hit)
 	{
 		tan_vert = -1 * tan_vfov * ((row + 0.5f) / cub3d->height - 0.5f);
 		if (tan_vert > -tan_wall_height && tan_vert < tan_wall_height)
-			color = wall_color(hit->side, hit->position_in_tile,
+			color = wall_color(cub3d, hit->side, hit->position_in_tile,
 					tan_vert / tan_wall_height * 0.5f + 0.5f);
 		else if (tan_vert > 0)
-			color = 0xffffff;
+			color = cub3d->map.color_ceil;
 		else
-			color = 0x00c060ff;
+			color = cub3d->map.color_floor;
 		mlx_put_pixel(cub3d->render, col, row, color);
 		row++;
 	}

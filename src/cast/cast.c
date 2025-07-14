@@ -3,17 +3,27 @@
 
 #include <math.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "cub3d.h"
 
+/*
+	If position happens to be *exactly* on grid line, ceil(pos) finds that same
+	line instead of the next one over. Special case this to return the correct
+	distance.
+*/
 static float	cast_initial_distance_to_grid(float pos, float direction)
 {
 	if (direction == 0)
 		return (INFINITY);
 	else if (direction > 0)
+	{
+		if ((ceilf(pos) == pos))
+			return (1 / direction);
 		return ((ceilf(pos) - pos) / direction);
+	}
 	else
-		return ((floorf(pos) - pos) / direction);
+		return ((pos - floorf(pos)) / -direction);
 }
 
 static bool	cast_check_wall(t_cub3d *cub3d, t_cast_state *state)
@@ -21,11 +31,11 @@ static bool	cast_check_wall(t_cub3d *cub3d, t_cast_state *state)
 	char	tile;
 
 	if (state->grid_x < 0
-		|| state->grid_x >= cub3d->map_width
+		|| (uint32_t)state->grid_x >= cub3d->map.width
 		|| state->grid_y < 0
-		|| state->grid_y >= cub3d->map_height)
+		|| (uint32_t)state->grid_y >= cub3d->map.height)
 		return (true);
-	tile = cub3d->map_array[state->grid_y * cub3d->map_width + state->grid_x];
+	tile = cub3d->map.grid[state->grid_y * cub3d->map.width + state->grid_x];
 	return (tile == '1');
 }
 
