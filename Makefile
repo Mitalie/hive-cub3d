@@ -17,6 +17,7 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	map/map_parse.c \
 	map/map_parameters.c \
 	render.c \
+	util/util_error.c \
 	util/util_mem.c \
 	util/util_parse_int.c \
 	vec2.c \

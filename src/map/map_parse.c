@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "util.h"
+
 static bool	can_reach_out_of_bounds(t_map *map, uint32_t x, uint32_t y)
 {
 	if (map->grid[y * map->width + x] == '1'
@@ -23,7 +25,7 @@ static bool	can_reach_out_of_bounds(t_map *map, uint32_t x, uint32_t y)
 bool	map_verify_grid(t_map *map)
 {
 	if (can_reach_out_of_bounds(map, map->player_x, map->player_y))
-		return (false);
+		return (util_err_false("Map error", "player can escape level"));
 	return (true);
 }
 
@@ -51,7 +53,7 @@ bool	map_parse(t_map *map, char *file_data)
 			while (*file_data == ' ' || *file_data == '\t')
 				file_data++;
 			if (*file_data != '\n')
-				return (false);
+				return (util_err_false("Map error", "garbage after parameter"));
 		}
 	}
 }

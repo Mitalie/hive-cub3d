@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 #include "MLX42/MLX42.h"
 
 #include "cub3d.h"
@@ -63,11 +64,16 @@ static float	initial_facing(char player_start)
 	return (45);
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_cub3d	cub3d;
 
-	if (!map_load(&cub3d.map, "map.cub"))
+	if (argc != 2)
+	{
+		printf("Error\nInvalid arguments, usage: cub3D <path/to/map.cub>\n");
+		return (1);
+	}
+	if (!map_load(&cub3d.map, argv[1]))
 		return (1);
 	cub3d.render = NULL;
 	cub3d.hfov_deg = 90;
@@ -76,7 +82,10 @@ int	main(void)
 	cub3d.player_facing = initial_facing(cub3d.map.player_start);
 	cub3d.mlx = mlx_init(800, 1200, "fdf", true);
 	if (!cub3d.mlx)
+	{
+		printf("Error\nFailed to initialize MLX42\n");
 		return (1);
+	}
 	mlx_loop_hook(cub3d.mlx, loop_hook, &cub3d);
 	mlx_key_hook(cub3d.mlx, key_hook, &cub3d);
 	mlx_loop(cub3d.mlx);

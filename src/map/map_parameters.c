@@ -15,7 +15,7 @@ static bool	map_parse_wall(mlx_texture_t **wall_out, char **file_data)
 
 	*file_data += 2;
 	if (**file_data != ' ' && **file_data != '\t')
-		return (false);
+		return (util_err_false("Map error", "unrecognized parameter"));
 	while (**file_data == ' ' || **file_data == '\t')
 		(*file_data)++;
 	wallfile_start = *file_data;
@@ -27,7 +27,7 @@ static bool	map_parse_wall(mlx_texture_t **wall_out, char **file_data)
 	*wall_out = mlx_load_png(wallfile_start);
 	**file_data = wallfile_end_tmp;
 	if (*wall_out == NULL)
-		return (false);
+		return (util_err_false("Map error", "failed to load texture"));
 	return (true);
 }
 
@@ -39,23 +39,23 @@ static bool	map_parse_color(uint32_t *color_out, char **file_data)
 
 	(*file_data)++;
 	if (**file_data != ' ' && **file_data != '\t')
-		return (false);
+		return (util_err_false("Map error", "unrecognized parameter"));
 	while (**file_data == ' ' || **file_data == '\t')
 		(*file_data)++;
 	if (!util_parse_uint8(file_data, &red))
-		return (false);
+		return (util_err_false("Map error", "invalid color value"));
 	if (*(*file_data)++ != ',')
-		return (false);
+		return (util_err_false("Map error", "invalid color value"));
 	while (**file_data == ' ' || **file_data == '\t')
 		(*file_data)++;
 	if (!util_parse_uint8(file_data, &green))
-		return (false);
+		return (util_err_false("Map error", "invalid color value"));
 	if (*(*file_data)++ != ',')
-		return (false);
+		return (util_err_false("Map error", "invalid color value"));
 	while (**file_data == ' ' || **file_data == '\t')
 		(*file_data)++;
 	if (!util_parse_uint8(file_data, &blue))
-		return (false);
+		return (util_err_false("Map error", "invalid color value"));
 	*color_out = red << 24 | green << 16 | blue << 8 | 0xff;
 	return (true);
 }
@@ -75,7 +75,7 @@ bool	map_parse_parameter(t_map *map, char **file_data)
 	else if (**file_data == 'F')
 		return (map_parse_color(&map->color_floor, file_data));
 	else
-		return (false);
+		return (util_err_false("Map error", "unrecognized parameter"));
 }
 
 /*
@@ -89,6 +89,6 @@ bool	map_verify_parameters(t_map *map)
 		|| map->wall_west == NULL
 		|| map->color_ceil == 0
 		|| map->color_floor == 0)
-		return (false);
+		return (util_err_false("Map error", "missing one or more parameters"));
 	return (true);
 }

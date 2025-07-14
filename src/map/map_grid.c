@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "util.h"
+
 static bool	map_check_grid_character(t_map *map, char c, uint32_t col)
 {
 	if (c == ' ' || c == '1' || c == '0')
@@ -12,13 +14,13 @@ static bool	map_check_grid_character(t_map *map, char c, uint32_t col)
 	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 	{
 		if (map->player_start)
-			return (false);
+			return (util_err_false("Map error", "duplicate start"));
 		map->player_start = c;
 		map->player_x = col;
 		map->player_y = map->height;
 		return (true);
 	}
-	return (false);
+	return (util_err_false("Map error", "invalid character in grid"));
 }
 
 /*
@@ -41,7 +43,7 @@ static size_t	map_check_line(t_map *map, char *line_start)
 		i++;
 	}
 	if (empty)
-		return (0);
+		return (util_err_false("Map error", "empty line in grid"));
 	if (i > map->width)
 		map->width = i;
 	if (line_start[i] == '\n')
@@ -66,10 +68,10 @@ static bool	map_count_and_alloc(t_map *map, char *file_data)
 		i += line_len;
 	}
 	if (!map->player_start)
-		return (false);
+		return (util_err_false("Map error", "no starting position"));
 	map->grid = malloc(sizeof(map->grid[0]) * map->width * map->height);
 	if (!map->grid)
-		return (false);
+		return (util_err_false("Loading map failed", "malloc failed"));
 	return (true);
 }
 

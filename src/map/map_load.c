@@ -1,6 +1,7 @@
 #include "map.h"
 #include "map_internal.h"
 
+#include <errno.h>
 #include <fcntl.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -59,6 +60,7 @@ static char	*map_load_file(const char *path)
 	char	*buf;
 	size_t	buf_len;
 	size_t	file_len;
+	int		saved_errno;
 
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
@@ -73,7 +75,9 @@ static char	*map_load_file(const char *path)
 	}
 	if (buf)
 		buf[file_len] = '\0';
+	saved_errno = errno;
 	close(fd);
+	errno = saved_errno;
 	return (buf);
 }
 
@@ -81,10 +85,16 @@ bool	map_load(t_map *map, const char *path)
 {
 	char	*file_data;
 	bool	success;
+	int		i;
 
+	i = 0;
+	while (path[i])
+		i++;
+	if (util_memcmp(".cub", &path[i - 4], 4))
+		return (util_err_false("Map filename should end \".cub\"", path));
 	file_data = map_load_file(path);
 	if (!file_data)
-		return (false);
+		return (util_errno_false("Loading map file failed", path));
 	map->wall_north = NULL;
 	map->wall_south = NULL;
 	map->wall_east = NULL;
