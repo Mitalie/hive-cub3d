@@ -1,6 +1,7 @@
 #include "input.h"
 #include "input_internal.h"
 
+#include <math.h>
 #include <stddef.h>
 #include "MLX42/MLX42.h"
 
@@ -49,4 +50,15 @@ void	input_key(t_cub3d *cub3d, mlx_key_data_t key_data)
 		if (key_data.action == input.action && key_data.key == input.key)
 			input.func(cub3d, input.arg);
 	}
+}
+
+void	input_cursor(t_cub3d *cub3d, float dx, float dy)
+{
+	float	degrees_per_cursor_unit;
+	float	angle;
+
+	(void)dy;
+	degrees_per_cursor_unit = 0.07f;
+	angle = degrees_per_cursor_unit * dx;
+	cub3d->player_facing = fmodf(cub3d->player_facing + angle, 360);
 }
