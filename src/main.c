@@ -95,7 +95,7 @@ int	main(int argc, char **argv)
 	cub3d.player.x = cub3d.map.player_x + 0.5;
 	cub3d.player.y = cub3d.map.player_y + 0.5;
 	cub3d.player_facing = initial_facing(cub3d.map.player_start);
-	cub3d.mlx = mlx_init(800, 1200, "fdf", true);
+	cub3d.mlx = mlx_init(1920, 1080, "SIM-ulator", true);
 	if (!cub3d.mlx)
 	{
 		printf("Error\nFailed to initialize MLX42\n");
