@@ -15,7 +15,9 @@ static const t_input_timed	g_input_timed[] = {
 {MLX_KEY_A, input_move, INPUT_LEFT},
 {MLX_KEY_D, input_move, INPUT_RIGHT},
 {MLX_KEY_LEFT, input_turn, INPUT_TURN_LEFT},
+{MLX_KEY_Q, input_turn, INPUT_TURN_LEFT},
 {MLX_KEY_RIGHT, input_turn, INPUT_TURN_RIGHT},
+{MLX_KEY_E, input_turn, INPUT_TURN_RIGHT},
 };
 
 static const t_input_event	g_input_event[] = {
