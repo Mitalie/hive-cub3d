@@ -81,8 +81,8 @@ void	cast(t_cub3d *cub3d, t_vec2 pos, t_vec2 dir, t_hit *out)
 {
 	t_cast_state	state;
 
-	state.grid_x = pos.x;
-	state.grid_y = pos.y;
+	state.grid_x = floorf(pos.x);
+	state.grid_y = floorf(pos.y);
 	state.dir = dir;
 	state.distance_to_grid_x = cast_initial_distance_to_grid(pos.x, dir.x);
 	state.distance_to_grid_y = cast_initial_distance_to_grid(pos.y, dir.y);
