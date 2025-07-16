@@ -23,6 +23,8 @@ void	input_move(t_cub3d *cub3d, int arg, float time)
 	t_vec2	move;
 
 	speed = 1.0;
+	if (mlx_is_key_down(cub3d->mlx, MLX_KEY_LEFT_SHIFT))
+		speed = 3.0;
 	distance = speed * time;
 	move.x = 0;
 	move.y = 0;

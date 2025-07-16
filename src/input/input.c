@@ -1,6 +1,7 @@
 #include "input.h"
 #include "input_internal.h"
 
+#include <math.h>
 #include <stddef.h>
 #include "MLX42/MLX42.h"
 
@@ -14,7 +15,9 @@ static const t_input_timed	g_input_timed[] = {
 {MLX_KEY_A, input_move, INPUT_LEFT},
 {MLX_KEY_D, input_move, INPUT_RIGHT},
 {MLX_KEY_LEFT, input_turn, INPUT_TURN_LEFT},
+{MLX_KEY_Q, input_turn, INPUT_TURN_LEFT},
 {MLX_KEY_RIGHT, input_turn, INPUT_TURN_RIGHT},
+{MLX_KEY_E, input_turn, INPUT_TURN_RIGHT},
 };
 
 static const t_input_event	g_input_event[] = {
@@ -49,4 +52,15 @@ void	input_key(t_cub3d *cub3d, mlx_key_data_t key_data)
 		if (key_data.action == input.action && key_data.key == input.key)
 			input.func(cub3d, input.arg);
 	}
+}
+
+void	input_cursor(t_cub3d *cub3d, float dx, float dy)
+{
+	float	degrees_per_cursor_unit;
+	float	angle;
+
+	(void)dy;
+	degrees_per_cursor_unit = 0.07f;
+	angle = degrees_per_cursor_unit * dx;
+	cub3d->player_facing = fmodf(cub3d->player_facing + angle, 360);
 }

@@ -48,6 +48,21 @@ void	loop_hook(void *param)
 	render_view(cub3d);
 }
 
+void	cursor_hook(double x, double y, void *param)
+{
+	t_cub3d	*cub3d;
+
+	cub3d = param;
+	if (!cub3d->cursor_ready)
+	{
+		cub3d->cursor_ready = true;
+		mlx_set_mouse_pos(cub3d->mlx, 0, 0);
+		return ;
+	}
+	input_cursor(cub3d, x, y);
+	mlx_set_mouse_pos(cub3d->mlx, 0, 0);
+}
+
 /*
 	If you see a diagonal starting angle, fix map parsing
 */
@@ -80,7 +95,7 @@ int	main(int argc, char **argv)
 	cub3d.player.x = cub3d.map.player_x + 0.5;
 	cub3d.player.y = cub3d.map.player_y + 0.5;
 	cub3d.player_facing = initial_facing(cub3d.map.player_start);
-	cub3d.mlx = mlx_init(800, 1200, "fdf", true);
+	cub3d.mlx = mlx_init(1920, 1080, "SIM-ulator", true);
 	if (!cub3d.mlx)
 	{
 		printf("Error\nFailed to initialize MLX42\n");
@@ -88,6 +103,9 @@ int	main(int argc, char **argv)
 	}
 	mlx_loop_hook(cub3d.mlx, loop_hook, &cub3d);
 	mlx_key_hook(cub3d.mlx, key_hook, &cub3d);
+	mlx_cursor_hook(cub3d.mlx, cursor_hook, &cub3d);
+	mlx_set_cursor_mode(cub3d.mlx, MLX_MOUSE_DISABLED);
+	cub3d.cursor_ready = false;
 	mlx_loop(cub3d.mlx);
 	if (cub3d.render)
 		mlx_delete_image(cub3d.mlx, cub3d.render);

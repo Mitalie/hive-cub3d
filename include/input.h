@@ -7,5 +7,6 @@
 
 void	input_timed(t_cub3d *cub3d);
 void	input_key(t_cub3d *cub3d, mlx_key_data_t key_data);
+void	input_cursor(t_cub3d *cub3d, float dx, float dy);
 
 #endif
