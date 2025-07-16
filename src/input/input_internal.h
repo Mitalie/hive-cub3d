@@ -35,17 +35,4 @@ enum e_input_simple_action
 
 void	input_simple_action(t_cub3d *cub3d, int arg);
 
-enum e_input_move_dir
-{
-	INPUT_FORWARD,
-	INPUT_BACKWARD,
-	INPUT_LEFT,
-	INPUT_RIGHT,
-	INPUT_TURN_LEFT,
-	INPUT_TURN_RIGHT,
-};
-
-void	input_move(t_cub3d *cub3d, int arg, float time);
-void	input_turn(t_cub3d *cub3d, int arg, float time);
-
 #endif

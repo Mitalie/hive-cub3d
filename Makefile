@@ -10,8 +10,8 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	main.c \
 	cast/cast.c \
 	color.c \
+	control/control.c \
 	input/input.c \
-	input/input_funcs.c \
 	map/map_grid.c \
 	map/map_load.c \
 	map/map_parse.c \
