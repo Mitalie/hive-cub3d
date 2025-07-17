@@ -24,4 +24,6 @@ typedef struct s_map
 bool	map_load(t_map *map, const char *path);
 void	map_unload(t_map *map);
 
+bool	map_tile_is_wall(t_map *map, int x, int y);
+
 #endif

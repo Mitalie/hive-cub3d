@@ -46,6 +46,7 @@ void	loop_hook(void *param)
 	}
 	input_timed(cub3d);
 	render_view(cub3d);
+	printf("%f\n", 1000 * cub3d->mlx->delta_time);
 }
 
 void	cursor_hook(double x, double y, void *param)

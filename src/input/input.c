@@ -5,19 +5,20 @@
 #include <stddef.h>
 #include "MLX42/MLX42.h"
 
+#include "control.h"
 #include "cub3d.h"
 
 /**** Input maps **************************************************************/
 
 static const t_input_timed	g_input_timed[] = {
-{MLX_KEY_W, input_move, INPUT_FORWARD},
-{MLX_KEY_S, input_move, INPUT_BACKWARD},
-{MLX_KEY_A, input_move, INPUT_LEFT},
-{MLX_KEY_D, input_move, INPUT_RIGHT},
-{MLX_KEY_LEFT, input_turn, INPUT_TURN_LEFT},
-{MLX_KEY_Q, input_turn, INPUT_TURN_LEFT},
-{MLX_KEY_RIGHT, input_turn, INPUT_TURN_RIGHT},
-{MLX_KEY_E, input_turn, INPUT_TURN_RIGHT},
+{MLX_KEY_W, control_move, CONTROL_FORWARD},
+{MLX_KEY_S, control_move, CONTROL_BACKWARD},
+{MLX_KEY_A, control_move, CONTROL_LEFT},
+{MLX_KEY_D, control_move, CONTROL_RIGHT},
+{MLX_KEY_LEFT, control_turn, CONTROL_TURN_LEFT},
+{MLX_KEY_Q, control_turn, CONTROL_TURN_LEFT},
+{MLX_KEY_RIGHT, control_turn, CONTROL_TURN_RIGHT},
+{MLX_KEY_E, control_turn, CONTROL_TURN_RIGHT},
 };
 
 static const t_input_event	g_input_event[] = {
@@ -63,4 +64,12 @@ void	input_cursor(t_cub3d *cub3d, float dx, float dy)
 	degrees_per_cursor_unit = 0.07f;
 	angle = degrees_per_cursor_unit * dx;
 	cub3d->player_facing = fmodf(cub3d->player_facing + angle, 360);
+}
+
+/**** Handler functions *******************************************************/
+
+void	input_simple_action(t_cub3d *cub3d, int arg)
+{
+	if (arg == INPUT_CLOSE)
+		mlx_close_window(cub3d->mlx);
 }

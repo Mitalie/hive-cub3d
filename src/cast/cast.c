@@ -28,15 +28,7 @@ static float	cast_initial_distance_to_grid(float pos, float direction)
 
 static bool	cast_check_wall(t_cub3d *cub3d, t_cast_state *state)
 {
-	char	tile;
-
-	if (state->grid_x < 0
-		|| (uint32_t)state->grid_x >= cub3d->map.width
-		|| state->grid_y < 0
-		|| (uint32_t)state->grid_y >= cub3d->map.height)
-		return (true);
-	tile = cub3d->map.grid[state->grid_y * cub3d->map.width + state->grid_x];
-	return (tile == '1');
+	return (map_tile_is_wall(&cub3d->map, state->grid_x, state->grid_y));
 }
 
 static bool	cast_advance_x(t_cub3d *cub3d, t_cast_state *state, t_hit *out)
