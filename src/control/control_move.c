@@ -115,9 +115,9 @@ void	control_move(t_cub3d *cub3d, int arg, float time)
 	float	distance;
 	t_vec2	move;
 
-	speed = 1.0;
+	speed = 2.0f;
 	if (mlx_is_key_down(cub3d->mlx, MLX_KEY_LEFT_SHIFT))
-		speed = 3.0;
+		speed = 5.0f;
 	distance = speed * time;
 	move.x = 0;
 	move.y = 0;

@@ -11,6 +11,8 @@ static bool	map_check_grid_character(t_map *map, char c, uint32_t col)
 {
 	if (c == ' ' || c == '1' || c == '0')
 		return (true);
+	if (c == 'n' || c == 's')
+		return (true);
 	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 	{
 		if (map->player_start)
