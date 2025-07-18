@@ -8,6 +8,32 @@
 #include "cub3d.h"
 
 /*
+	Calculates intersection of a line passing through `p` in the direction `d`
+	with either vertical or horizontal axis. Outputs distance along `d` in
+	`out->x` and distance along the axis in `out->y`.
+
+	This can be used to intersect the line with any vertical or horizontal line
+	by specifying `p` relative to the other line.
+*/
+void	intersect(t_vec2 p, t_vec2 d, t_vec2 *out, bool vertical)
+{
+	float	u;
+
+	if (vertical)
+	{
+		u = -p.x / d.x;
+		out->x = u;
+		out->y = u * d.y + p.y;
+	}
+	else
+	{
+		u = -p.y / d.y;
+		out->x = u;
+		out->y = u * d.x + p.x;
+	}
+}
+
+/*
 	If position happens to be *exactly* on grid line, ceil(pos) finds that same
 	line instead of the next one over. Special case this to return the correct
 	distance.

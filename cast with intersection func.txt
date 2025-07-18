@@ -1,0 +1,17 @@
+determine next vertical and horizontal lines in ray direction and intersect ray with each
+while true
+	determine which intersection was closer (intersection.x)
+	determine which tile the ray enters (intersection.y) and its type
+	if wall
+		output distance, texture, position in tile
+		break
+	else if door
+		...
+		if hit
+			output distance, texture, position in tile
+			break
+	else if sprite
+		...
+		select unused sprite hit slot
+		store distance, texture, position in tile
+	move to next line in that direction and update intersection

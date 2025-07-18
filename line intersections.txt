@@ -1,0 +1,58 @@
+lines la and lb defined with starting point and direction vectors
+
+la = as + u*ad
+lb = bs + v*bd
+
+intersection, solve for u (along la) and v (along lb)
+
+as + u*ad = bs + v*bd
+
+take cross product on both sides and simplify
+
+as×bd + u*ad×bd = bs×bd + v*bd×bd
+as×bd + u*ad×bd = bs×bd
+u = (bs×bd - as×bd)/ad×bd
+u = (bs - as)×bd/ad×bd
+
+as×ad + u*ad×ad = bs×ad + v*bd×ad
+as×ad = bs×ad + v*bd×ad
+v = (as×ad - bs×ad)/bd×ad
+v = (bs×ad - as×ad)/ad×bd
+v = (bs - as)×ad/ad×bd
+
+extract common terms
+
+d = bs - as
+det = ad×bd
+u = d×bd/det
+v = d×ad/det
+
+break up x/y components
+
+det = adx*bdy - ady*bdx
+idet = 1/det
+dx = bsx - asx
+dy = bsy - asy
+u = (dx*bdy - dy*bdx)*idet
+v = (dx*ady - dy*adx)*idet
+
+if det == 0, lines are parallel
+
+
+
+simplified for bdx == 0, bdy == 1
+
+dx = bsx - asx
+dy = bsy - asy
+u = dx/adx
+v = u*ady - dy
+
+
+simplified for bdx == 1, bdy == 0
+
+dx = bsx - asx
+dy = bsy - asy
+u = dy/ady
+v = u*adx - dx
+
+void intersect_vertical(t_vec2 d, t_vec2 dir, float *dist_dir, float *dist_grid)
