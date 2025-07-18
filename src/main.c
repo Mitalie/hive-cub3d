@@ -63,7 +63,6 @@ void	loop_hook(void *param)
 	render_view(cub3d);
 	mlx_get_window_pos(cub3d->mlx, &unused, &unused);
 }
-}
 
 void	cursor_hook(double x, double y, void *param)
 {
