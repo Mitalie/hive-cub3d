@@ -8,115 +8,93 @@
 #include "cub3d.h"
 
 /*
-	Calculates intersection of a line passing through `p` in the direction `d`
-	with either vertical or horizontal axis. Outputs distance along `d` in
-	`out->x` and distance along the axis in `out->y`.
-
-	This can be used to intersect the line with any vertical or horizontal line
-	by specifying `p` relative to the other line.
-*/
-void	intersect(t_vec2 p, t_vec2 d, t_vec2 *out, bool vertical)
-{
-	float	u;
-
-	if (vertical)
-	{
-		u = -p.x / d.x;
-		out->x = u;
-		out->y = u * d.y + p.y;
-	}
-	else
-	{
-		u = -p.y / d.y;
-		out->x = u;
-		out->y = u * d.x + p.x;
-	}
-}
-
-/*
 	If position happens to be *exactly* on grid line, ceil(pos) finds that same
 	line instead of the next one over. Special case this to return the correct
 	distance.
 */
-static float	cast_initial_distance_to_grid(float pos, float direction)
+static float	next_grid_line(float pos, float direction)
 {
 	if (direction == 0)
 		return (INFINITY);
 	else if (direction > 0)
-	{
-		if ((ceilf(pos) == pos))
-			return (1 / direction);
-		return ((ceilf(pos) - pos) / direction);
-	}
+		return (ceilf(pos));
 	else
-		return ((pos - floorf(pos)) / -direction);
+		return (floorf(pos));
 }
 
-static bool	cast_check_wall(t_cub3d *cub3d, t_cast_state *state)
+bool	cross_x(t_cub3d *cub3d, t_cast_state *state, t_hit *hit)
 {
-	return (map_tile_is_wall(&cub3d->map, state->grid_x, state->grid_y));
-}
-
-static bool	cast_advance_x(t_cub3d *cub3d, t_cast_state *state, t_hit *out)
-{
-	if (state->dir.x > 0)
-		state->grid_x++;
-	else
-		state->grid_x--;
-	if (cast_check_wall(cub3d, state))
+	if (state->dir.y < 0
+		&& map_tile_is_wall(&cub3d->map,
+			state->intersection_x.position_on_target, state->grid_line_y - 1))
 	{
-		out->distance = state->distance_to_grid_x;
-		if (state->dir.x > 0)
-			out->side = HIT_WEST;
-		else
-			out->side = HIT_EAST;
+		hit->distance = state->intersection_x.distance_along_ray;
+		hit->side = HIT_SOUTH;
+		hit->position_in_tile = state->intersection_x.position_on_target
+			- floorf(state->intersection_x.position_on_target);
 		return (true);
 	}
-	state->distance_to_grid_x += 1 / fabsf(state->dir.x);
+	else if (map_tile_is_wall(&cub3d->map,
+			state->intersection_x.position_on_target, state->grid_line_y))
+	{
+		hit->distance = state->intersection_x.distance_along_ray;
+		hit->side = HIT_NORTH;
+		hit->position_in_tile = 1 - (state->intersection_x.position_on_target
+				- floorf(state->intersection_x.position_on_target));
+		return (true);
+	}
+	state->grid_line_y += copysignf(1, state->dir.y);
 	return (false);
 }
 
-static bool	cast_advance_y(t_cub3d *cub3d, t_cast_state *state, t_hit *out)
+bool	cross_y(t_cub3d *cub3d, t_cast_state *state, t_hit *hit)
 {
-	if (state->dir.y > 0)
-		state->grid_y++;
-	else
-		state->grid_y--;
-	if (cast_check_wall(cub3d, state))
+	if (state->dir.x < 0
+		&& map_tile_is_wall(&cub3d->map,
+			state->grid_line_x - 1, state->intersection_y.position_on_target))
 	{
-		out->distance = state->distance_to_grid_y;
-		if (state->dir.y > 0)
-			out->side = HIT_NORTH;
-		else
-			out->side = HIT_SOUTH;
+		hit->distance = state->intersection_y.distance_along_ray;
+		hit->side = HIT_EAST;
+		hit->position_in_tile = state->intersection_y.position_on_target
+			- floorf(state->intersection_y.position_on_target);
 		return (true);
 	}
-	state->distance_to_grid_y += 1 / fabsf(state->dir.y);
+	else if (map_tile_is_wall(&cub3d->map,
+			state->grid_line_x, state->intersection_y.position_on_target))
+	{
+		hit->distance = state->intersection_y.distance_along_ray;
+		hit->side = HIT_WEST;
+		hit->position_in_tile = 1 - (state->intersection_y.position_on_target
+				- floorf(state->intersection_y.position_on_target));
+		return (true);
+	}
+	state->grid_line_x += copysignf(1, state->dir.x);
 	return (false);
 }
 
-void	cast(t_cub3d *cub3d, t_vec2 pos, t_vec2 dir, t_hit *out)
+void	cast(t_cub3d *cub3d, t_vec2 pos, t_vec2 dir, t_hit *hit)
 {
 	t_cast_state	state;
 
-	state.grid_x = floorf(pos.x);
-	state.grid_y = floorf(pos.y);
 	state.dir = dir;
-	state.distance_to_grid_x = cast_initial_distance_to_grid(pos.x, dir.x);
-	state.distance_to_grid_y = cast_initial_distance_to_grid(pos.y, dir.y);
+	state.grid_line_x = next_grid_line(pos.x, dir.x);
+	state.grid_line_y = next_grid_line(pos.y, dir.y);
+	state.intersection_x = intersect_x(pos, dir, state.grid_line_y);
+	state.intersection_y = intersect_y(pos, dir, state.grid_line_x);
 	while (1)
 	{
-		if (state.distance_to_grid_x < state.distance_to_grid_y)
+		if (state.intersection_x.distance_along_ray
+			< state.intersection_y.distance_along_ray)
 		{
-			if (cast_advance_x(cub3d, &state, out))
+			if (cross_x(cub3d, &state, hit))
 				break ;
+			state.intersection_x = intersect_x(pos, dir, state.grid_line_y);
 		}
 		else
-			if (cast_advance_y(cub3d, &state, out))
+		{
+			if (cross_y(cub3d, &state, hit))
 				break ;
+			state.intersection_y = intersect_y(pos, dir, state.grid_line_x);
+		}
 	}
-	if (state.distance_to_grid_x < state.distance_to_grid_y)
-		out->position_in_tile = pos.y + dir.y * out->distance;
-	else
-		out->position_in_tile = pos.x + dir.x * out->distance;
 }

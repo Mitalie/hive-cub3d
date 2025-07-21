@@ -9,6 +9,7 @@ INCDIRS := include
 SRCS := $(addprefix $(SRCDIR)/,\
 	main.c \
 	cast/cast.c \
+	cast/cast_intersect.c \
 	color.c \
 	control/control_move.c \
 	control/control_turn.c \
