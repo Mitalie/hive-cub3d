@@ -5,6 +5,28 @@
 # include <stdint.h>
 # include "MLX42/MLX42.h"
 
+# define MAX_DOORS 16
+# define MAX_TARGETS 32
+/*
+	This is not absolutely necessary, but we do a sanity check and reject maps
+	with ridiculous number of stations.
+*/
+# define MAX_STATIONS 512
+
+typedef struct s_door
+{
+	uint32_t	x;
+	uint32_t	y;
+	float		anim_start_time;
+}	t_door;
+
+typedef struct s_target
+{
+	uint32_t	x;
+	uint32_t	y;
+	bool		completed;
+}	t_target;
+
 typedef struct s_map
 {
 	uint32_t		width;
@@ -19,6 +41,10 @@ typedef struct s_map
 	uint32_t		player_x;
 	uint32_t		player_y;
 	char			player_start;
+	uint32_t		num_doors;
+	t_door			doors[MAX_DOORS];
+	uint32_t		num_targets;
+	t_target		targets[MAX_TARGETS];
 }	t_map;
 
 bool		map_load(t_map *map, const char *path);

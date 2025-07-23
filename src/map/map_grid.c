@@ -7,24 +7,6 @@
 
 #include "util.h"
 
-static bool	map_check_grid_character(t_map *map, char c, uint32_t col)
-{
-	if (c == ' ' || c == '1' || c == '0')
-		return (true);
-	if (c == 'n' || c == 's')
-		return (true);
-	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-	{
-		if (map->player_start)
-			return (util_err_false("Map error", "duplicate start"));
-		map->player_start = c;
-		map->player_x = col;
-		map->player_y = map->height;
-		return (true);
-	}
-	return (util_err_false("Map error", "invalid character in grid"));
-}
-
 /*
 	Validate line in the map file. Return either number of characters consumed
 	or zero for invalid line. Empty lines are never valid.
@@ -107,6 +89,8 @@ bool	map_parse_grid(t_map *map, char *file_data)
 		return (false);
 	if (!map_count_and_alloc(map, file_data))
 		return (false);
+	if (map->num_targets > MAX_TARGETS)
+		map->num_targets = MAX_TARGETS;
 	map_fill_grid(map, file_data);
 	return (map_verify_grid(map));
 }

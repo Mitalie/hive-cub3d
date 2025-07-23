@@ -13,4 +13,6 @@ bool	map_verify_parameters(t_map *map);
 bool	map_parse_grid(t_map *map, char *file_data);
 bool	map_verify_grid(t_map *map);
 
+bool	map_check_grid_character(t_map *map, char c, uint32_t col);
+
 #endif

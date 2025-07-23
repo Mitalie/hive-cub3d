@@ -19,6 +19,7 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	input/input.c \
 	map/map.c \
 	map/map_grid.c \
+	map/map_grid_character.c \
 	map/map_load.c \
 	map/map_parse.c \
 	map/map_parameters.c \
