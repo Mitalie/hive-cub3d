@@ -26,6 +26,7 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	util/util_error.c \
 	util/util_mem.c \
 	util/util_parse_int.c \
+	util/util_random.c \
 	vec2.c \
 )
 
