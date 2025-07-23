@@ -16,15 +16,19 @@ int	util_memcmp(const void *a, const void *b, size_t n)
 	return (cmp);
 }
 
-void	util_memcpy(void *dst, const void *src, size_t n)
+void	util_memmove(void *dst, const void *src, size_t n)
 {
 	char		*dst_c;
 	const char	*src_c;
 
 	dst_c = dst;
 	src_c = src;
-	while (n--)
-		*dst_c++ = *src_c++;
+	if (dst_c < src_c)
+		while (n--)
+			*dst_c++ = *src_c++;
+	if (dst_c > src_c)
+		while (n--)
+			dst_c[n] = src_c[n];
 }
 
 void	*util_realloc(void *buf, size_t old_size, size_t new_size)
@@ -45,9 +49,9 @@ void	*util_realloc(void *buf, size_t old_size, size_t new_size)
 		return (NULL);
 	}
 	if (old_size > new_size)
-		util_memcpy(new_buf, buf, new_size);
+		util_memmove(new_buf, buf, new_size);
 	else
-		util_memcpy(new_buf, buf, old_size);
+		util_memmove(new_buf, buf, old_size);
 	free(buf);
 	return (new_buf);
 }
