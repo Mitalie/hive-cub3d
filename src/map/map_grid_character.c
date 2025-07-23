@@ -11,7 +11,7 @@ static bool	map_grid_door(t_map *map, uint32_t x, uint32_t y)
 		return (util_err_false("Map error", "too many doors"));
 	map->doors[map->num_doors].x = x;
 	map->doors[map->num_doors].y = y;
-	map->doors[map->num_doors].anim_start_time = 0.0f;
+	map->doors[map->num_doors].anim_start_time = 6.0f;
 	map->num_doors++;
 	return (true);
 }

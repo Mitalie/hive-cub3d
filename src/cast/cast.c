@@ -66,6 +66,7 @@ void	cast(t_cub3d *cub3d, t_vec2 pos, t_vec2 dir, t_hit *hit)
 {
 	t_cast_state	state;
 
+	state.pos = pos;
 	state.dir = dir;
 	state.tile_x = floorf(pos.x);
 	state.tile_y = floorf(pos.y);

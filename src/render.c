@@ -7,7 +7,8 @@
 #include "cast.h"
 #include "vec2.h"
 
-static uint32_t	wall_color(t_cub3d *cub3d, t_side side, float xpos, float ypos)
+static uint32_t	wall_color(t_cub3d *cub3d, t_material material,
+	float xpos, float ypos)
 {
 	mlx_texture_t	*tex;
 	uint32_t		x;
@@ -15,14 +16,18 @@ static uint32_t	wall_color(t_cub3d *cub3d, t_side side, float xpos, float ypos)
 	uint8_t			*texel;
 
 	xpos = xpos - floorf(xpos);
-	if (side == HIT_NORTH)
+	if (material == MAT_WALL_NORTH)
 		tex = cub3d->map.wall_north;
-	else if (side == HIT_SOUTH)
+	else if (material == MAT_WALL_SOUTH)
 		tex = cub3d->map.wall_south;
-	else if (side == HIT_WEST)
+	else if (material == MAT_WALL_WEST)
 		tex = cub3d->map.wall_west;
-	else if (side == HIT_EAST)
+	else if (material == MAT_WALL_EAST)
 		tex = cub3d->map.wall_east;
+	else if (material == MAT_DOOR_FACE)
+		tex = cub3d->map.door_face;
+	else if (material == MAT_DOOR_SIDE)
+		tex = cub3d->map.door_side;
 	else
 		return (0xff);
 	x = tex->width * xpos;
@@ -44,7 +49,7 @@ static void	render_column(t_cub3d *cub3d, float tan_vfov, int col, t_hit *hit)
 	{
 		tan_vert = -1 * tan_vfov * ((row + 0.5f) / cub3d->height - 0.5f);
 		if (tan_vert > -tan_wall_height && tan_vert < tan_wall_height)
-			color = wall_color(cub3d, hit->side, hit->position_in_tile,
+			color = wall_color(cub3d, hit->material, hit->position_in_tile,
 					tan_vert / tan_wall_height * 0.5f + 0.5f);
 		else if (tan_vert > 0)
 			color = cub3d->map.color_ceil;

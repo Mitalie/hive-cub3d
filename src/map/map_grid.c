@@ -92,5 +92,8 @@ bool	map_parse_grid(t_map *map, char *file_data)
 	if (map->num_targets > MAX_TARGETS)
 		map->num_targets = MAX_TARGETS;
 	map_fill_grid(map, file_data);
-	return (map_verify_grid(map));
+	if (!map_verify_grid(map))
+		return (false);
+	map_fill_grid(map, file_data);
+	return (true);
 }

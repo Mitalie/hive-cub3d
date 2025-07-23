@@ -6,7 +6,7 @@
 # include "MLX42/MLX42.h"
 
 # define MAX_DOORS 16
-# define MAX_TARGETS 32
+# define MAX_TARGETS 10
 /*
 	This is not absolutely necessary, but we do a sanity check and reject maps
 	with ridiculous number of stations.
@@ -36,6 +36,8 @@ typedef struct s_map
 	mlx_texture_t	*wall_south;
 	mlx_texture_t	*wall_east;
 	mlx_texture_t	*wall_west;
+	mlx_texture_t	*door_face;
+	mlx_texture_t	*door_side;
 	uint32_t		color_floor;
 	uint32_t		color_ceil;
 	uint32_t		player_x;
@@ -61,5 +63,7 @@ typedef enum e_map_tile
 }	t_map_tile;
 
 t_map_tile	map_tile(t_map *map, int x, int y);
+t_door		*map_door(t_map *map, int x, int y);
+t_target	*map_target(t_map *map, int x, int y);
 
 #endif

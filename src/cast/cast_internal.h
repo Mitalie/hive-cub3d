@@ -21,6 +21,7 @@ typedef struct s_cast_state
 {
 	int				tile_x;
 	int				tile_y;
+	t_vec2			pos;
 	t_vec2			dir;
 	float			grid_line_x;
 	float			grid_line_y;

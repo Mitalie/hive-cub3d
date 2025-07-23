@@ -1,4 +1,5 @@
-
+DF ./map/door_face.png
+DS ./map/1px_gray.png
 
 
 NO ./map/hive.png

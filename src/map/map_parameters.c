@@ -70,6 +70,10 @@ bool	map_parse_parameter(t_map *map, char **file_data)
 		return (map_parse_wall(&map->wall_east, file_data));
 	else if (util_memcmp(*file_data, "WE", 2) == 0)
 		return (map_parse_wall(&map->wall_west, file_data));
+	else if (util_memcmp(*file_data, "DF", 2) == 0)
+		return (map_parse_wall(&map->door_face, file_data));
+	else if (util_memcmp(*file_data, "DS", 2) == 0)
+		return (map_parse_wall(&map->door_side, file_data));
 	else if (**file_data == 'C')
 		return (map_parse_color(&map->color_ceil, file_data));
 	else if (**file_data == 'F')

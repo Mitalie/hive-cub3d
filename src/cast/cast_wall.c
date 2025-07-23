@@ -15,7 +15,15 @@ bool	cast_wall(t_cub3d *cub3d, t_cast_state *state, t_hit *hit,
 	(void)state;
 	hit->distance = intersection.distance_along_ray;
 	position = intersection.position_on_target;
-	if (hit->side == HIT_NORTH || hit->side == HIT_WEST)
+	if (hit->side == HIT_NORTH)
+		hit->material = MAT_WALL_NORTH;
+	if (hit->side == HIT_SOUTH)
+		hit->material = MAT_WALL_SOUTH;
+	if (hit->side == HIT_EAST)
+		hit->material = MAT_WALL_EAST;
+	if (hit->side == HIT_WEST)
+		hit->material = MAT_WALL_WEST;
+	if (hit->side == HIT_NORTH || hit->side == HIT_EAST)
 		hit->position_in_tile = ceilf(position) - position;
 	else
 		hit->position_in_tile = position - floorf(position);
