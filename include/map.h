@@ -21,9 +21,19 @@ typedef struct s_map
 	char			player_start;
 }	t_map;
 
-bool	map_load(t_map *map, const char *path);
-void	map_unload(t_map *map);
+bool		map_load(t_map *map, const char *path);
+void		map_unload(t_map *map);
 
-bool	map_tile_is_wall(t_map *map, int x, int y);
+typedef enum e_map_tile
+{
+	TILE_EMPTY,
+	TILE_WALL,
+	TILE_DOOR_NS,
+	TILE_DOOR_EW,
+	TILE_STATION_N,
+	TILE_STATION_S,
+}	t_map_tile;
+
+t_map_tile	map_tile(t_map *map, int x, int y);
 
 #endif

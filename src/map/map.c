@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-bool	map_tile_is_wall(t_map *map, int x, int y)
+t_map_tile	map_tile(t_map *map, int x, int y)
 {
 	char	tile;
 
@@ -13,5 +13,15 @@ bool	map_tile_is_wall(t_map *map, int x, int y)
 		|| (uint32_t)y >= map->height)
 		return (true);
 	tile = map->grid[y * map->width + x];
-	return (tile == '1');
+	if (tile == '1')
+		return (TILE_WALL);
+	if (tile == '-')
+		return (TILE_DOOR_NS);
+	if (tile == '|')
+		return (TILE_DOOR_EW);
+	if (tile == 'n')
+		return (TILE_STATION_N);
+	if (tile == 's')
+		return (TILE_STATION_S);
+	return (TILE_EMPTY);
 }

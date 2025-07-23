@@ -34,9 +34,9 @@ static bool	control_check_wall(
 	t_cub3d *cub3d, int row, int pos_in_row, bool vertical_row)
 {
 	if (vertical_row)
-		return (map_tile_is_wall(&cub3d->map, row, pos_in_row));
+		return (map_tile(&cub3d->map, row, pos_in_row) == TILE_WALL);
 	else
-		return (map_tile_is_wall(&cub3d->map, pos_in_row, row));
+		return (map_tile(&cub3d->map, pos_in_row, row) == TILE_WALL);
 }
 
 /*
