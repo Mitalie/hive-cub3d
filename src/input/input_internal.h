@@ -31,6 +31,7 @@ typedef struct s_input_event
 enum e_input_simple_action
 {
 	INPUT_CLOSE,
+	INPUT_INTERACT,
 };
 
 void	input_simple_action(t_cub3d *cub3d, int arg);
