@@ -1,5 +1,6 @@
 #include "map.h"
 
+#include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -26,24 +27,30 @@ t_map_tile	map_tile(t_map *map, int x, int y)
 	return (TILE_EMPTY);
 }
 
-t_door	*map_door(t_map *map, int x, int y)
+float	map_door_state(t_map *map, int x, int y)
 {
 	uint32_t	i;
 	t_door		*door;
+	float		anim_time;
+	float		state;
 
 	if (x < 0
 		|| (uint32_t)x >= map->width
 		|| y < 0
 		|| (uint32_t)y >= map->height)
-		return (NULL);
+		return (NAN);
 	i = 0;
 	while (i < map->num_doors)
 	{
 		door = &map->doors[i++];
 		if (door->x == (uint32_t)x && door->y == (uint32_t)y)
-			return (door);
+		{
+			anim_time = mlx_get_time() - door->anim_start_time;
+			state = fminf(2.0f * anim_time, -2.0f * (anim_time - 4.0f));
+			return (fmaxf(0.0f, fminf(1.0f, state)));
+		}
 	}
-	return (NULL);
+	return (NAN);
 }
 
 t_target	*map_target(t_map *map, int x, int y)

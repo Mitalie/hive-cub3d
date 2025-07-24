@@ -55,17 +55,12 @@ static bool	cast_door_yellow(t_cub3d *cub3d, t_cast_state *state, t_hit *hit,
 bool	cast_door(t_cub3d *cub3d, t_cast_state *state, t_hit *hit,
 	t_intersection intersection)
 {
-	const t_door	*door;
-	float			door_anim_time;
 	float			door_state;
 	float			front_pos;
 	float			red_pos;
 	float			green_pos;
 
-	door = map_door(&cub3d->map, state->tile_x, state->tile_y);
-	door_anim_time = mlx_get_time() - door->anim_start_time;
-	door_state = fminf(2.0f * door_anim_time, -2.0f * (door_anim_time - 4.0f));
-	door_state = fmaxf(0.0f, fminf(1.0f, door_state));
+	door_state = map_door_state(&cub3d->map, state->tile_x, state->tile_y);
 	front_pos = intersection.position_on_target;
 	if (hit->side == HIT_NORTH || hit->side == HIT_EAST)
 		front_pos = ceilf(front_pos) - front_pos;

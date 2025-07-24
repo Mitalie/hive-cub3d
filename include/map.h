@@ -63,7 +63,7 @@ typedef enum e_map_tile
 }	t_map_tile;
 
 t_map_tile	map_tile(t_map *map, int x, int y);
-t_door		*map_door(t_map *map, int x, int y);
+float		map_door_state(t_map *map, int x, int y);
 t_target	*map_target(t_map *map, int x, int y);
 
 #endif
