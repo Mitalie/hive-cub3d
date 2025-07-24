@@ -6,13 +6,12 @@
 
 #include "cub3d.h"
 
-bool	cast_wall(t_cub3d *cub3d, t_cast_state *state, t_hit *hit,
-	t_intersection intersection)
+bool	cast_wall(t_cast_state *state, t_intersection intersection)
 {
 	float	position;
+	t_hit	*hit;
 
-	(void)cub3d;
-	(void)state;
+	hit = &state->cr->opaque;
 	hit->distance = intersection.distance_along_ray;
 	position = intersection.position_on_target;
 	if (hit->side == HIT_NORTH)

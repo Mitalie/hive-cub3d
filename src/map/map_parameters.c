@@ -74,6 +74,20 @@ bool	map_parse_parameter(t_map *map, char **file_data)
 		return (map_parse_wall(&map->door_face, file_data));
 	else if (util_memcmp(*file_data, "DS", 2) == 0)
 		return (map_parse_wall(&map->door_side, file_data));
+	else if (util_memcmp(*file_data, "SI", 2) == 0)
+		return (map_parse_wall(&map->station_inactive, file_data));
+	else if (util_memcmp(*file_data, "SA", 2) == 0)
+		return (map_parse_wall(&map->station_active, file_data));
+	else if (util_memcmp(*file_data, "SB", 2) == 0)
+		return (map_parse_wall(&map->station_back, file_data));
+	else if (util_memcmp(*file_data, "S1", 2) == 0)
+		return (map_parse_wall(&map->station_completed1, file_data));
+	else if (util_memcmp(*file_data, "S2", 2) == 0)
+		return (map_parse_wall(&map->station_completed2, file_data));
+	else if (util_memcmp(*file_data, "S3", 2) == 0)
+		return (map_parse_wall(&map->station_completed3, file_data));
+	else if (util_memcmp(*file_data, "S4", 2) == 0)
+		return (map_parse_wall(&map->station_completed4, file_data));
 	else if (**file_data == 'C')
 		return (map_parse_color(&map->color_ceil, file_data));
 	else if (**file_data == 'F')
@@ -91,6 +105,15 @@ bool	map_verify_parameters(t_map *map)
 		|| map->wall_south == NULL
 		|| map->wall_east == NULL
 		|| map->wall_west == NULL
+		|| map->door_face == NULL
+		|| map->door_side == NULL
+		|| map->station_inactive == NULL
+		|| map->station_active == NULL
+		|| map->station_back == NULL
+		|| map->station_completed1 == NULL
+		|| map->station_completed2 == NULL
+		|| map->station_completed3 == NULL
+		|| map->station_completed4 == NULL
 		|| map->color_ceil == 0
 		|| map->color_floor == 0)
 		return (util_err_false("Map error", "missing one or more parameters"));

@@ -21,13 +21,13 @@
 	green = [0.5 * (1 + state), 1]
 */
 
-static bool	cast_door_yellow(t_cub3d *cub3d, t_cast_state *state, t_hit *hit,
-	float door_state)
+static bool	cast_door_yellow(t_cast_state *state, float door_state)
 {
 	float			yellow_line_pos;
 	t_intersection	intersection;
+	t_hit			*hit;
 
-	(void)cub3d;
+	hit = &state->cr->opaque;
 	if (hit->side == HIT_NORTH || hit->side == HIT_SOUTH)
 	{
 		yellow_line_pos = state->tile_x + 0.5f + copysignf(0.5f * door_state, state->dir.x);
@@ -52,15 +52,16 @@ static bool	cast_door_yellow(t_cub3d *cub3d, t_cast_state *state, t_hit *hit,
 	}
 }
 
-bool	cast_door(t_cub3d *cub3d, t_cast_state *state, t_hit *hit,
-	t_intersection intersection)
+bool	cast_door(t_cast_state *state, t_intersection intersection)
 {
-	float			door_state;
-	float			front_pos;
-	float			red_pos;
-	float			green_pos;
+	float	door_state;
+	float	front_pos;
+	float	red_pos;
+	float	green_pos;
+	t_hit	*hit;
 
-	door_state = map_door_state(&cub3d->map, state->tile_x, state->tile_y);
+	hit = &state->cr->opaque;
+	door_state = map_door_state(&state->cub3d->map, state->tile_x, state->tile_y);
 	front_pos = intersection.position_on_target;
 	if (hit->side == HIT_NORTH || hit->side == HIT_EAST)
 		front_pos = ceilf(front_pos) - front_pos;
@@ -82,5 +83,5 @@ bool	cast_door(t_cub3d *cub3d, t_cast_state *state, t_hit *hit,
 		hit->material = MAT_DOOR_FACE;
 		return (true);
 	}
-	return (cast_door_yellow(cub3d, state,  hit, door_state));
+	return (cast_door_yellow(state, door_state));
 }

@@ -38,6 +38,13 @@ typedef struct s_map
 	mlx_texture_t	*wall_west;
 	mlx_texture_t	*door_face;
 	mlx_texture_t	*door_side;
+	mlx_texture_t	*station_inactive;
+	mlx_texture_t	*station_active;
+	mlx_texture_t	*station_back;
+	mlx_texture_t	*station_completed1;
+	mlx_texture_t	*station_completed2;
+	mlx_texture_t	*station_completed3;
+	mlx_texture_t	*station_completed4;
 	uint32_t		color_floor;
 	uint32_t		color_ceil;
 	uint32_t		player_x;

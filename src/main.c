@@ -59,9 +59,11 @@ void	loop_hook(void *param)
 		mlx_close_window(cub3d->mlx);
 		return ;
 	}
+	cub3d->time = mlx_get_time();
 	input_timed(cub3d);
 	render_view(cub3d);
 	mlx_get_window_pos(cub3d->mlx, &unused, &unused);
+	printf("%f\n", cub3d->mlx->delta_time);
 }
 
 void	cursor_hook(double x, double y, void *param)

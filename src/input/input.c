@@ -101,5 +101,15 @@ void	input_simple_action(t_cub3d *cub3d, int arg)
 			}
 			i++;
 		}
+		i = 0;
+		while (i < cub3d->map.num_targets)
+		{
+			distx = cub3d->player.x - (cub3d->map.targets[i].x + 0.5f);
+			disty = cub3d->player.y - (cub3d->map.targets[i].y + 0.5f);
+			distsq = distx * distx + disty * disty;
+			if (distsq < 1.44f)
+				cub3d->map.targets[i].completed = true;
+			i++;
+		}
 	}
 }

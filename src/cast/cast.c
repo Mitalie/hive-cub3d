@@ -22,53 +22,55 @@ static float	next_grid_line(float pos, float direction)
 		return (floorf(pos));
 }
 
-bool	cross_x(t_cub3d *cub3d, t_cast_state *state, t_hit *hit)
+bool	cross_x(t_cast_state *state)
 {
 	t_map_tile	tile;
 
 	state->tile_y += copysignf(1, state->dir.y);
 	state->grid_line_y += copysignf(1, state->dir.y);
-	tile = map_tile(&cub3d->map, state->tile_x, state->tile_y);
+	tile = map_tile(&state->cub3d->map, state->tile_x, state->tile_y);
 	if (state->dir.y < 0)
-		hit->side = HIT_SOUTH;
+		state->cr->opaque.side = HIT_SOUTH;
 	else
-		hit->side = HIT_NORTH;
+		state->cr->opaque.side = HIT_NORTH;
 	if (tile == TILE_WALL)
-		return (cast_wall(cub3d, state, hit, state->intersection_x));
+		return (cast_wall(state, state->intersection_x));
 	else if (tile == TILE_DOOR_NS || tile == TILE_DOOR_EW)
-		return (cast_door(cub3d, state, hit, state->intersection_x));
+		return (cast_door(state, state->intersection_x));
 	else if (tile == TILE_STATION_N || tile == TILE_STATION_S)
-		return (cast_station(cub3d, state, hit, state->intersection_x));
+		return (cast_station(state, tile));
 	return (false);
 }
 
-bool	cross_y(t_cub3d *cub3d, t_cast_state *state, t_hit *hit)
+bool	cross_y(t_cast_state *state)
 {
 	t_map_tile	tile;
 
 	state->tile_x += copysignf(1, state->dir.x);
 	state->grid_line_x += copysignf(1, state->dir.x);
-	tile = map_tile(&cub3d->map, state->tile_x, state->tile_y);
+	tile = map_tile(&state->cub3d->map, state->tile_x, state->tile_y);
 	if (state->dir.x < 0)
-		hit->side = HIT_EAST;
+		state->cr->opaque.side = HIT_EAST;
 	else
-		hit->side = HIT_WEST;
+		state->cr->opaque.side = HIT_WEST;
 	if (tile == TILE_WALL)
-		return (cast_wall(cub3d, state, hit, state->intersection_y));
+		return (cast_wall(state, state->intersection_y));
 	else if (tile == TILE_DOOR_NS || tile == TILE_DOOR_EW)
-		return (cast_door(cub3d, state, hit, state->intersection_y));
+		return (cast_door(state, state->intersection_y));
 	else if (tile == TILE_STATION_N || tile == TILE_STATION_S)
-		return (cast_station(cub3d, state, hit, state->intersection_y));
+		return (cast_station(state, tile));
 	return (false);
 }
 
-static bool	cast_inside_door(t_cub3d *cub3d, t_cast_state *state, t_hit *hit)
+static bool	cast_inside_door(t_cast_state *state)
 {
 	t_map_tile	tile;
 	float		int_x_dist;
 	float		int_y_dist;
+	t_hit		*hit;
 
-	tile = map_tile(&cub3d->map, state->tile_x, state->tile_y);
+	hit = &state->cr->opaque;
+	tile = map_tile(&state->cub3d->map, state->tile_x, state->tile_y);
 	int_x_dist = state->intersection_x.distance_along_ray;
 	int_y_dist = state->intersection_y.distance_along_ray;
 	if (tile == TILE_DOOR_NS && int_y_dist < int_x_dist)
@@ -88,10 +90,12 @@ static bool	cast_inside_door(t_cub3d *cub3d, t_cast_state *state, t_hit *hit)
 	return (false);
 }
 
-void	cast(t_cub3d *cub3d, t_vec2 pos, t_vec2 dir, t_hit *hit)
+void	cast(t_cub3d *cub3d, t_vec2 pos, t_vec2 dir, t_cast_result *cr)
 {
 	t_cast_state	state;
 
+	state.cub3d = cub3d;
+	state.cr = cr;
 	state.pos = pos;
 	state.dir = dir;
 	state.tile_x = floorf(pos.x);
@@ -100,20 +104,20 @@ void	cast(t_cub3d *cub3d, t_vec2 pos, t_vec2 dir, t_hit *hit)
 	state.grid_line_y = next_grid_line(pos.y, dir.y);
 	state.intersection_x = intersect_x(pos, dir, state.grid_line_y);
 	state.intersection_y = intersect_y(pos, dir, state.grid_line_x);
-	if (cast_inside_door(cub3d, &state, hit))
+	if (cast_inside_door(&state))
 		return ;
 	while (1)
 	{
 		if (state.intersection_x.distance_along_ray
 			< state.intersection_y.distance_along_ray)
 		{
-			if (cross_x(cub3d, &state, hit))
+			if (cross_x(&state))
 				break ;
 			state.intersection_x = intersect_x(pos, dir, state.grid_line_y);
 		}
 		else
 		{
-			if (cross_y(cub3d, &state, hit))
+			if (cross_y(&state))
 				break ;
 			state.intersection_y = intersect_y(pos, dir, state.grid_line_x);
 		}

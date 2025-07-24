@@ -11,6 +11,7 @@ typedef struct s_cub3d
 {
 	mlx_t		*mlx;
 	mlx_image_t	*render;
+	double		time;
 	t_map		map;
 	int			width;
 	int			height;
