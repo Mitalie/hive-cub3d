@@ -123,7 +123,10 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	if (!map_load(&cub3d.map, argv[1]))
+	{
+		map_unload(&cub3d.map);
 		return (1);
+	}
 	cub3d.render = NULL;
 	cub3d.hfov_deg = 90;
 	cub3d.player.x = cub3d.map.player_x + 0.5;
@@ -132,10 +135,16 @@ int	main(int argc, char **argv)
 	cub3d.mlx = mlx_init(1920, 1080, "SIM-ulator", true);
 	if (!cub3d.mlx)
 	{
+		map_unload(&cub3d.map);
 		printf("Error\nFailed to initialize MLX42\n");
 		return (1);
 	}
-	mlx_loop_hook(cub3d.mlx, loop_hook, &cub3d);
+	if (mlx_loop_hook(cub3d.mlx, loop_hook, &cub3d))
+	{
+		map_unload(&cub3d.map);
+		printf("Error\nFailed to set up loop hook with MLX42\n");
+		return (1);
+	};
 	mlx_key_hook(cub3d.mlx, key_hook, &cub3d);
 	mlx_cursor_hook(cub3d.mlx, cursor_hook, &cub3d);
 	mlx_set_cursor_mode(cub3d.mlx, MLX_MOUSE_DISABLED);
@@ -144,4 +153,5 @@ int	main(int argc, char **argv)
 	if (cub3d.render)
 		mlx_delete_image(cub3d.mlx, cub3d.render);
 	mlx_terminate(cub3d.mlx);
+	map_unload(&cub3d.map);
 }
