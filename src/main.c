@@ -1,12 +1,15 @@
+#include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <sys/time.h>
 #include "MLX42/MLX42.h"
 
 #include "cub3d.h"
 #include "input.h"
 #include "map.h"
 #include "render.h"
+#include "util.h"
 
 bool	image_setup(t_cub3d *cub3d)
 {
@@ -59,7 +62,17 @@ void	loop_hook(void *param)
 		mlx_close_window(cub3d->mlx);
 		return ;
 	}
-	cub3d->time = mlx_get_time();
+	{
+		float a = fmodf(mlx_get_time(), 4.0f);
+		if (a > 3.0f)
+			cub3d->target_completed_tex = cub3d->map.station_completed4;
+		else if (a > 2.0f)
+			cub3d->target_completed_tex = cub3d->map.station_completed3;
+		else if (a > 1.0f)
+			cub3d->target_completed_tex = cub3d->map.station_completed2;
+		else
+			cub3d->target_completed_tex = cub3d->map.station_completed1;
+	}
 	input_timed(cub3d);
 	render_view(cub3d);
 	mlx_get_window_pos(cub3d->mlx, &unused, &unused);
@@ -100,7 +113,10 @@ static float	initial_facing(char player_start)
 int	main(int argc, char **argv)
 {
 	t_cub3d	cub3d;
+	struct timeval t;
 
+	gettimeofday(&t, NULL);
+	util_random(t.tv_sec);
 	if (argc != 2)
 	{
 		printf("Error\nInvalid arguments, usage: cub3D <path/to/map.cub>\n");

@@ -42,7 +42,6 @@ static uint32_t	sprite_color(t_cub3d *cub3d, t_material material,
 	uint32_t		x;
 	uint32_t		y;
 	uint8_t			*texel;
-	float			anim_time;
 
 	xpos = xpos - floorf(xpos);
 	if (material == MAT_STATION_INACTIVE)
@@ -52,17 +51,7 @@ static uint32_t	sprite_color(t_cub3d *cub3d, t_material material,
 	else if (material == MAT_STATION_BACK)
 		tex = cub3d->map.station_back;
 	else if (material == MAT_STATION_COMPLETED)
-	{
-		anim_time = fmodf(cub3d->time, 4.0f);
-		if (anim_time < 1.0f)
-			tex = cub3d->map.station_completed1;
-		else if (anim_time < 2.0f)
-			tex = cub3d->map.station_completed2;
-		else if (anim_time < 3.0f)
-			tex = cub3d->map.station_completed3;
-		else
-			tex = cub3d->map.station_completed4;
-	}
+		tex = cub3d->target_completed_tex;
 	else
 		return (0xff);
 	x = tex->width * xpos;
