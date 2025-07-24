@@ -33,10 +33,26 @@ static float	control_move_next_check_line(float pos, float dir)
 static bool	control_check_wall(
 	t_cub3d *cub3d, int row, int pos_in_row, bool vertical_row)
 {
+	int			x;
+	int			y;
+	t_map_tile	tile;
+
 	if (vertical_row)
-		return (map_tile(&cub3d->map, row, pos_in_row) == TILE_WALL);
+	{
+		x = row;
+		y = pos_in_row;
+	}
 	else
-		return (map_tile(&cub3d->map, pos_in_row, row) == TILE_WALL);
+	{
+		x = pos_in_row;
+		y = row;
+	}
+	tile = map_tile(&cub3d->map, x, y);
+	if (tile == TILE_WALL)
+		return (true);
+	if (tile == TILE_DOOR_NS || tile == TILE_DOOR_EW)
+		return (map_door_state(&cub3d->map, x, y) < 1.0f);
+	return (false);
 }
 
 /*
