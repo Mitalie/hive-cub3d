@@ -139,12 +139,12 @@ int	main(int argc, char **argv)
 		printf("Error\nFailed to initialize MLX42\n");
 		return (1);
 	}
-	if (mlx_loop_hook(cub3d.mlx, loop_hook, &cub3d))
+	if (!mlx_loop_hook(cub3d.mlx, loop_hook, &cub3d))
 	{
 		map_unload(&cub3d.map);
 		printf("Error\nFailed to set up loop hook with MLX42\n");
 		return (1);
-	};
+	}
 	mlx_key_hook(cub3d.mlx, key_hook, &cub3d);
 	mlx_cursor_hook(cub3d.mlx, cursor_hook, &cub3d);
 	mlx_set_cursor_mode(cub3d.mlx, MLX_MOUSE_DISABLED);
