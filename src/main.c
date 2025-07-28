@@ -8,6 +8,7 @@
 #include "cub3d.h"
 #include "input.h"
 #include "map.h"
+#include "minimap.h"
 #include "render.h"
 #include "util.h"
 
@@ -57,7 +58,7 @@ void	loop_hook(void *param)
 	int32_t	unused;
 
 	cub3d = param;
-	if (!image_setup(cub3d))
+	if (!image_setup(cub3d) || !minimap_setup(cub3d))
 	{
 		mlx_close_window(cub3d->mlx);
 		return ;
@@ -75,6 +76,7 @@ void	loop_hook(void *param)
 	}
 	input_timed(cub3d);
 	render_view(cub3d);
+	minimap_render_fg(cub3d);
 	mlx_get_window_pos(cub3d->mlx, &unused, &unused);
 	printf("%f\n", cub3d->mlx->delta_time);
 }
@@ -152,6 +154,7 @@ int	main(int argc, char **argv)
 	mlx_loop(cub3d.mlx);
 	if (cub3d.render)
 		mlx_delete_image(cub3d.mlx, cub3d.render);
+	minimap_cleanup(&cub3d);
 	mlx_terminate(cub3d.mlx);
 	map_unload(&cub3d.map);
 }

@@ -23,6 +23,8 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	map/map_load.c \
 	map/map_parse.c \
 	map/map_parameters.c \
+	minimap/minimap_render.c \
+	minimap/minimap_setup.c \
 	render.c \
 	util/util_error.c \
 	util/util_mem.c \
