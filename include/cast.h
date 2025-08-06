@@ -24,6 +24,7 @@ typedef enum e_material
 	MAT_STATION_ACTIVE,
 	MAT_STATION_COMPLETED,
 	MAT_STATION_BACK,
+	MAT_ENEMY,
 }	t_material;
 
 typedef struct s_hit

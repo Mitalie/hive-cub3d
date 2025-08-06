@@ -35,7 +35,7 @@ static uint32_t	wall_color(t_cub3d *cub3d, t_material material,
 	texel = &tex->pixels[tex->bytes_per_pixel * (y * tex->width + x)];
 	return (texel[0] << 24 | texel[1] << 16 | texel[2] << 8 | 0xff);
 }
-static uint32_t	sprite_color(t_cub3d *cub3d, t_material material,
+uint32_t	sprite_color(t_cub3d *cub3d, t_material material,
 	float xpos, float ypos)
 {
 	mlx_texture_t	*tex;
@@ -52,6 +52,8 @@ static uint32_t	sprite_color(t_cub3d *cub3d, t_material material,
 		tex = cub3d->map.station_back;
 	else if (material == MAT_STATION_COMPLETED)
 		tex = cub3d->target_completed_tex;
+	else if (material == MAT_ENEMY)
+		tex = cub3d->map.enemy_texture;
 	else
 		return (0xff);
 	x = tex->width * xpos;

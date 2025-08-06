@@ -16,6 +16,9 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	color.c \
 	control/control_move.c \
 	control/control_turn.c \
+	enemy/enemy_anim.c \
+	enemy/enemy_render.c \
+	enemy/enemy_update.c \
 	input/input.c \
 	map/map.c \
 	map/map_grid.c \

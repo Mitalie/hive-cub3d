@@ -6,6 +6,7 @@
 #include "MLX42/MLX42.h"
 
 #include "cub3d.h"
+#include "enemy.h"
 #include "input.h"
 #include "map.h"
 #include "minimap.h"
@@ -63,6 +64,7 @@ void	loop_hook(void *param)
 		mlx_close_window(cub3d->mlx);
 		return ;
 	}
+	cub3d->frame_timestamp = mlx_get_time();
 	{
 		float a = fmodf(mlx_get_time(), 4.0f);
 		if (a > 3.0f)
@@ -76,6 +78,8 @@ void	loop_hook(void *param)
 	}
 	input_timed(cub3d);
 	render_view(cub3d);
+	enemy_update(cub3d);
+	enemy_render(cub3d);
 	minimap_render_fg(cub3d);
 	mlx_get_window_pos(cub3d->mlx, &unused, &unused);
 	printf("%f\n", cub3d->mlx->delta_time);
@@ -134,6 +138,9 @@ int	main(int argc, char **argv)
 	cub3d.player.x = cub3d.map.player_x + 0.5;
 	cub3d.player.y = cub3d.map.player_y + 0.5;
 	cub3d.player_facing = initial_facing(cub3d.map.player_start);
+	cub3d.enemy.pos.x = cub3d.map.enemy_start_x + 0.5f;
+	cub3d.enemy.pos.y = cub3d.map.enemy_start_y + 0.5f;
+	cub3d.enemy.anim_start_time = 0;
 	cub3d.mlx = mlx_init(1920, 1080, "SIM-ulator", true);
 	if (!cub3d.mlx)
 	{
