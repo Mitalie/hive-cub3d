@@ -102,6 +102,8 @@ bool	map_load(t_map *map, const char *path)
 	map->color_ceil = 0;
 	map->color_floor = 0;
 	map->player_start = '\0';
+	map->has_enemy = false;
+	map->enemy_texture = NULL;
 	map->num_doors = 0;
 	map->num_targets = 0;
 	success = map_parse(map, file_data);

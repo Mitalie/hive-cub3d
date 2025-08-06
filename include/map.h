@@ -45,11 +45,15 @@ typedef struct s_map
 	mlx_texture_t	*station_completed2;
 	mlx_texture_t	*station_completed3;
 	mlx_texture_t	*station_completed4;
+	mlx_texture_t	*enemy_texture;
 	uint32_t		color_floor;
 	uint32_t		color_ceil;
 	uint32_t		player_x;
 	uint32_t		player_y;
 	char			player_start;
+	bool			has_enemy;
+	uint32_t		enemy_start_x;
+	uint32_t		enemy_start_y;
 	uint32_t		num_doors;
 	t_door			doors[MAX_DOORS];
 	uint32_t		num_targets;

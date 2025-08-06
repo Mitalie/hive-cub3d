@@ -88,6 +88,8 @@ bool	map_parse_parameter(t_map *map, char **file_data)
 		return (map_parse_wall(&map->station_completed3, file_data));
 	else if (util_memcmp(*file_data, "S4", 2) == 0)
 		return (map_parse_wall(&map->station_completed4, file_data));
+	else if (util_memcmp(*file_data, "EN", 2) == 0)
+		return (map_parse_wall(&map->enemy_texture, file_data));
 	else if (**file_data == 'C')
 		return (map_parse_color(&map->color_ceil, file_data));
 	else if (**file_data == 'F')
@@ -114,6 +116,7 @@ bool	map_verify_parameters(t_map *map)
 		|| map->station_completed2 == NULL
 		|| map->station_completed3 == NULL
 		|| map->station_completed4 == NULL
+		|| map->enemy_texture == NULL
 		|| map->color_ceil == 0
 		|| map->color_floor == 0)
 		return (util_err_false("Map error", "missing one or more parameters"));

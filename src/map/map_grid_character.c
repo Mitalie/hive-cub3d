@@ -65,6 +65,16 @@ static bool	map_grid_start(t_map *map, uint32_t x, uint32_t y, char c)
 	return (true);
 }
 
+static bool	map_grid_enemy(t_map *map, uint32_t x, uint32_t y)
+{
+	if (map->has_enemy)
+		return (util_err_false("Map error", "too many enemies"));
+	map->has_enemy = true;
+	map->enemy_start_x = x;
+	map->enemy_start_y = y;
+	return (true);
+}
+
 bool	map_check_grid_character(t_map *map, char c, uint32_t col)
 {
 	if (c == ' ' || c == '1' || c == '0')
@@ -75,5 +85,7 @@ bool	map_check_grid_character(t_map *map, char c, uint32_t col)
 		return (map_grid_station(map, col, map->height));
 	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 		return (map_grid_start(map, col, map->height, c));
+	if (c == 'e')
+		return (map_grid_enemy(map, col, map->height));
 	return (util_err_false("Map error", "invalid character in grid"));
 }
