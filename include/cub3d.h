@@ -11,19 +11,20 @@
 
 typedef struct s_cub3d
 {
-	mlx_t			*mlx;
-	mlx_image_t		*render;
-	mlx_texture_t	*target_completed_tex;
-	float			frame_timestamp;
-	t_map			map;
-	t_minimap		minimap;
-	int				width;
-	int				height;
-	float			hfov_deg;
-	t_vec2			player;
-	float			player_facing;
-	t_enemy			enemy;
-	bool			cursor_ready;
+	mlx_t					*mlx;
+	mlx_image_t				*render;
+	mlx_texture_t			*target_completed_tex;
+	float					frame_timestamp;
+	t_map					map;
+	t_minimap				minimap;
+	int						width;
+	int						height;
+	float					hfov_deg;
+	t_vec2					player;
+	float					player_facing;
+	t_enemy					enemy;
+	t_enemy_pathing_state	enemy_pathing;
+	bool					cursor_ready;
 }	t_cub3d;
 
 #endif

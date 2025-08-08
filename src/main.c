@@ -82,7 +82,7 @@ void	loop_hook(void *param)
 	enemy_render(cub3d);
 	minimap_render_fg(cub3d);
 	mlx_get_window_pos(cub3d->mlx, &unused, &unused);
-	printf("%f\n", cub3d->mlx->delta_time);
+	//printf("%f\n", cub3d->mlx->delta_time);
 }
 
 void	cursor_hook(double x, double y, void *param)
@@ -133,6 +133,12 @@ int	main(int argc, char **argv)
 		map_unload(&cub3d.map);
 		return (1);
 	}
+	if (!enemy_pathing_alloc(&cub3d))
+	{
+		enemy_pathing_dealloc(&cub3d);
+		map_unload(&cub3d.map);
+		return (1);
+	}
 	cub3d.render = NULL;
 	cub3d.hfov_deg = 90;
 	cub3d.player.x = cub3d.map.player_x + 0.5;
@@ -140,16 +146,18 @@ int	main(int argc, char **argv)
 	cub3d.player_facing = initial_facing(cub3d.map.player_start);
 	cub3d.enemy.pos.x = cub3d.map.enemy_start_x + 0.5f;
 	cub3d.enemy.pos.y = cub3d.map.enemy_start_y + 0.5f;
-	cub3d.enemy.anim_start_time = 0;
+	cub3d.enemy.anim_start_time = -1;
 	cub3d.mlx = mlx_init(1920, 1080, "SIM-ulator", true);
 	if (!cub3d.mlx)
 	{
+		enemy_pathing_dealloc(&cub3d);
 		map_unload(&cub3d.map);
 		printf("Error\nFailed to initialize MLX42\n");
 		return (1);
 	}
 	if (!mlx_loop_hook(cub3d.mlx, loop_hook, &cub3d))
 	{
+		enemy_pathing_dealloc(&cub3d);
 		map_unload(&cub3d.map);
 		printf("Error\nFailed to set up loop hook with MLX42\n");
 		return (1);
@@ -163,5 +171,6 @@ int	main(int argc, char **argv)
 		mlx_delete_image(cub3d.mlx, cub3d.render);
 	minimap_cleanup(&cub3d);
 	mlx_terminate(cub3d.mlx);
+	enemy_pathing_dealloc(&cub3d);
 	map_unload(&cub3d.map);
 }

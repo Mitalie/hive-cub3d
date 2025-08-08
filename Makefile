@@ -17,6 +17,9 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	control/control_move.c \
 	control/control_turn.c \
 	enemy/enemy_anim.c \
+	enemy/enemy_pathing_alloc.c \
+	enemy/enemy_pathing_pq.c \
+	enemy/enemy_pathing.c \
 	enemy/enemy_render.c \
 	enemy/enemy_update.c \
 	input/input.c \

@@ -10,11 +10,13 @@ void	enemy_update(t_cub3d *cub3d)
 
 	while (cub3d->frame_timestamp - cub3d->enemy.anim_start_time > 2)
 	{
-		cub3d->enemy.anim_start_pos.x = 68.5f;
-		cub3d->enemy.anim_start_pos.y = 4.5f;
-		cub3d->enemy.anim_end_pos.x = 69.5f;
-		cub3d->enemy.anim_end_pos.y = 4.5f;
-		cub3d->enemy.anim_start_time += 2;
+		if (cub3d->enemy.anim_start_time < 0)
+			cub3d->enemy.anim_start_time = 0;
+		else
+			cub3d->enemy.anim_start_time += 2;
+		cub3d->enemy.anim_start_pos.x = cub3d->enemy.pos.x;
+		cub3d->enemy.anim_start_pos.y = cub3d->enemy.pos.y;
+		enemy_pathing(cub3d);
 	}
 	anim_time = cub3d->frame_timestamp - cub3d->enemy.anim_start_time;
 	move = enemy_anim_move_x(anim_time);
