@@ -5,61 +5,8 @@
 #include "MLX42/MLX42.h"
 
 #include "cast.h"
+#include "material.h"
 #include "vec2.h"
-
-static uint32_t	wall_color(t_cub3d *cub3d, t_material material,
-	float xpos, float ypos)
-{
-	mlx_texture_t	*tex;
-	uint32_t		x;
-	uint32_t		y;
-	uint8_t			*texel;
-
-	if (material == MAT_WALL_NORTH)
-		tex = cub3d->map.wall_north;
-	else if (material == MAT_WALL_SOUTH)
-		tex = cub3d->map.wall_south;
-	else if (material == MAT_WALL_WEST)
-		tex = cub3d->map.wall_west;
-	else if (material == MAT_WALL_EAST)
-		tex = cub3d->map.wall_east;
-	else if (material == MAT_DOOR_FACE)
-		tex = cub3d->map.door_face;
-	else if (material == MAT_DOOR_SIDE)
-		tex = cub3d->map.door_side;
-	else
-		return (0xff);
-	x = fmaxf(0.0f, fminf(tex->width - 1, tex->width * xpos));
-	y = fmaxf(0.0f, fminf(tex->height - 1, tex->height * (1 - ypos)));
-	texel = &tex->pixels[tex->bytes_per_pixel * (y * tex->width + x)];
-	return (texel[0] << 24 | texel[1] << 16 | texel[2] << 8 | 0xff);
-}
-
-uint32_t	sprite_color(t_cub3d *cub3d, t_material material,
-	float xpos, float ypos)
-{
-	mlx_texture_t	*tex;
-	uint32_t		x;
-	uint32_t		y;
-	uint8_t			*texel;
-
-	if (material == MAT_STATION_INACTIVE)
-		tex = cub3d->map.station_inactive;
-	else if (material == MAT_STATION_ACTIVE)
-		tex = cub3d->map.station_active;
-	else if (material == MAT_STATION_BACK)
-		tex = cub3d->map.station_back;
-	else if (material == MAT_STATION_COMPLETED)
-		tex = cub3d->target_completed_tex;
-	else if (material == MAT_ENEMY)
-		tex = cub3d->map.enemy_texture;
-	else
-		return (0xff);
-	x = fmaxf(0.0f, fminf(tex->width - 1, tex->width * xpos));
-	y = fmaxf(0.0f, fminf(tex->height - 1, tex->height * (1 - ypos)));
-	texel = &tex->pixels[tex->bytes_per_pixel * (y * tex->width + x)];
-	return (texel[0] << 24 | texel[1] << 16 | texel[2] << 8 | texel[3]);
-}
 
 /*
 	ypos is first set based on the sprite distance so that 0.0 .. 1.0 matches
@@ -68,62 +15,75 @@ uint32_t	sprite_color(t_cub3d *cub3d, t_material material,
 	whole image down by 20%, for enemy sprites we account for animated size and
 	position.
 */
-static bool	render_sprite_pixel(t_cub3d *cub3d, int col,
-	int row, t_cast_result *cr, float tan_vert)
+static bool	render_hit_pixel(t_cub3d *cub3d, t_vec2i pixel,
+	t_hit *hit, float tan_vert)
+{
+	uint32_t	color;
+	float		ypos;
+
+	ypos = tan_vert * hit->distance + 0.5f;
+	if (hit->material == MAT_ENEMY)
+		ypos = (ypos - cub3d->enemy.anim_y_pos) / cub3d->enemy.anim_height;
+	else if (hit->material == MAT_STATION_INACTIVE
+		|| hit->material == MAT_STATION_ACTIVE
+		|| hit->material == MAT_STATION_COMPLETED
+		|| hit->material == MAT_STATION_BACK)
+		ypos += 0.2f;
+	if (ypos < 0.0f || ypos > 1.0f)
+		return (false);
+	color = material_tex(cub3d, hit->material, hit->position_in_tile, ypos);
+	if ((color & 0xff) == 0xff)
+	{
+		mlx_put_pixel(cub3d->render, pixel.x, pixel.y, color);
+		return (true);
+	}
+	return (false);
+}
+
+static bool	render_sprite_pixel(t_cub3d *cub3d, t_vec2i pixel,
+	t_cast_result *cr, float tan_vert)
 {
 	size_t		i;
 	t_hit		*hit;
-	uint32_t	color;
-	float		ypos;
 
 	i = 0;
 	while (i < cr->num_transparent)
 	{
 		hit = &cr->transparent[i++];
-		ypos = tan_vert * hit->distance + 0.5f;
-		if (hit->material == MAT_ENEMY)
-			ypos = (ypos - cub3d->enemy.anim_y_pos) / cub3d->enemy.anim_height;
-		else
-			ypos += 0.2f;
-		if (ypos < 0.0f || ypos > 1.0f)
-			return (false);
-		color = sprite_color(cub3d, hit->material, hit->position_in_tile, ypos);
-		if ((color & 0xff) == 0xff)
-		{
-			mlx_put_pixel(cub3d->render, col, row, color);
+		if (render_hit_pixel(cub3d, pixel, hit, tan_vert))
 			return (true);
-		}
 	}
 	return (false);
+}
+
+static void	render_bg_pixel(t_cub3d *cub3d, t_vec2i pixel,
+	t_cast_result *cr, float tan_vert)
+{
+	uint32_t	color;
+
+	if (render_hit_pixel(cub3d, pixel, &cr->opaque, tan_vert))
+		return ;
+	if (tan_vert > 0)
+		color = cub3d->map.color_ceil;
+	else
+		color = cub3d->map.color_floor;
+	mlx_put_pixel(cub3d->render, pixel.x, pixel.y, color);
 }
 
 static void	render_column(t_cub3d *cub3d, float tan_vfov, int col,
 	t_cast_result *cr)
 {
-	int			row;
+	t_vec2i		pixel;
 	float		tan_vert;
-	float		tan_wall_height;
-	uint32_t	color;
 
-	tan_wall_height = 0.5f / cr->opaque.distance;
-	row = 0;
-	while (row < cub3d->height)
+	pixel.x = col;
+	pixel.y = -1;
+	while (++pixel.y < cub3d->height)
 	{
-		tan_vert = -1 * tan_vfov * ((row + 0.5f) / cub3d->height - 0.5f);
-		if (render_sprite_pixel(cub3d, col, row, cr, tan_vert))
-		{
-			row++;
+		tan_vert = -1 * tan_vfov * ((pixel.y + 0.5f) / cub3d->height - 0.5f);
+		if (render_sprite_pixel(cub3d, pixel, cr, tan_vert))
 			continue ;
-		}
-		if (tan_vert > -tan_wall_height && tan_vert < tan_wall_height)
-			color = wall_color(cub3d, cr->opaque.material, cr->opaque.position_in_tile,
-					tan_vert / tan_wall_height * 0.5f + 0.5f);
-		else if (tan_vert > 0)
-			color = cub3d->map.color_ceil;
-		else
-			color = cub3d->map.color_floor;
-		mlx_put_pixel(cub3d->render, col, row, color);
-		row++;
+		render_bg_pixel(cub3d, pixel, cr, tan_vert);
 	}
 }
 

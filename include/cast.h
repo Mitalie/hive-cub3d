@@ -2,6 +2,7 @@
 # define CAST_H
 
 # include "cub3d.h"
+# include "material.h"
 # include "vec2.h"
 
 typedef enum e_side
@@ -11,21 +12,6 @@ typedef enum e_side
 	HIT_WEST,
 	HIT_EAST,
 }	t_side;
-
-typedef enum e_material
-{
-	MAT_WALL_NORTH,
-	MAT_WALL_SOUTH,
-	MAT_WALL_WEST,
-	MAT_WALL_EAST,
-	MAT_DOOR_FACE,
-	MAT_DOOR_SIDE,
-	MAT_STATION_INACTIVE,
-	MAT_STATION_ACTIVE,
-	MAT_STATION_COMPLETED,
-	MAT_STATION_BACK,
-	MAT_ENEMY,
-}	t_material;
 
 typedef struct s_hit
 {

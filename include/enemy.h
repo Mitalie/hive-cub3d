@@ -6,7 +6,10 @@
 
 # include "vec2.h"
 
-typedef struct s_cub3d	t_cub3d;
+typedef struct s_cub3d					t_cub3d;
+
+typedef struct s_enemy_pathing_tile		t_enemy_pathing_tile;
+typedef struct s_enemy_pathing_pq_entry	t_enemy_pathing_pq_entry;
 
 typedef struct s_enemy
 {
@@ -18,9 +21,6 @@ typedef struct s_enemy
 	float	anim_height;
 	float	anim_y_pos;
 }	t_enemy;
-
-typedef struct s_enemy_pathing_tile	t_enemy_pathing_tile;
-typedef struct s_enemy_pathing_pq_entry	t_enemy_pathing_pq_entry;
 
 /*
 	Allocate the arrays once for the program run and keep reusing them to avoid
