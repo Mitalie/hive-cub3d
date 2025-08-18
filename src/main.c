@@ -77,9 +77,8 @@ void	loop_hook(void *param)
 			cub3d->target_completed_tex = cub3d->map.station_completed1;
 	}
 	input_timed(cub3d);
-	render_view(cub3d);
 	enemy_update(cub3d);
-	enemy_render(cub3d);
+	render_view(cub3d);
 	minimap_render_fg(cub3d);
 	mlx_get_window_pos(cub3d->mlx, &unused, &unused);
 	//printf("%f\n", cub3d->mlx->delta_time);

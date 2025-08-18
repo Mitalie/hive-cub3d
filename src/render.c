@@ -34,6 +34,7 @@ static uint32_t	wall_color(t_cub3d *cub3d, t_material material,
 	texel = &tex->pixels[tex->bytes_per_pixel * (y * tex->width + x)];
 	return (texel[0] << 24 | texel[1] << 16 | texel[2] << 8 | 0xff);
 }
+
 uint32_t	sprite_color(t_cub3d *cub3d, t_material material,
 	float xpos, float ypos)
 {
@@ -60,25 +61,33 @@ uint32_t	sprite_color(t_cub3d *cub3d, t_material material,
 	return (texel[0] << 24 | texel[1] << 16 | texel[2] << 8 | texel[3]);
 }
 
-static bool	render_station_pixel(t_cub3d *cub3d, int col,
+/*
+	ypos is first set based on the sprite distance so that 0.0 .. 1.0 matches
+	floor and ceiling, then adjusted so that 0.0 .. 1.0 matches the top and
+	the bottom of the particular sprite. For station sprites we just move the
+	whole image down by 20%, for enemy sprites we account for animated size and
+	position.
+*/
+static bool	render_sprite_pixel(t_cub3d *cub3d, int col,
 	int row, t_cast_result *cr, float tan_vert)
 {
 	size_t		i;
 	t_hit		*hit;
 	uint32_t	color;
-	float		tan_sprite_height;
+	float		ypos;
 
 	i = 0;
 	while (i < cr->num_transparent)
 	{
 		hit = &cr->transparent[i++];
-		tan_sprite_height = 0.5f / hit->distance;
-		if (tan_vert < -tan_sprite_height || tan_vert > tan_sprite_height)
+		ypos = tan_vert * hit->distance + 0.5f;
+		if (hit->material == MAT_ENEMY)
+			ypos = (ypos - cub3d->enemy.anim_y_pos) / cub3d->enemy.anim_height;
+		else
+			ypos += 0.2f;
+		if (ypos < 0.0f || ypos > 1.0f)
 			return (false);
-		if (tan_vert / tan_sprite_height * 0.5f + 0.5f > 0.8f)
-			return (false);
-		color = sprite_color(cub3d, hit->material, hit->position_in_tile,
-			tan_vert / tan_sprite_height * 0.5f + 0.7f);
+		color = sprite_color(cub3d, hit->material, hit->position_in_tile, ypos);
 		if ((color & 0xff) == 0xff)
 		{
 			mlx_put_pixel(cub3d->render, col, row, color);
@@ -101,7 +110,7 @@ static void	render_column(t_cub3d *cub3d, float tan_vfov, int col,
 	while (row < cub3d->height)
 	{
 		tan_vert = -1 * tan_vfov * ((row + 0.5f) / cub3d->height - 0.5f);
-		if (render_station_pixel(cub3d, col, row, cr, tan_vert))
+		if (render_sprite_pixel(cub3d, col, row, cr, tan_vert))
 		{
 			row++;
 			continue ;

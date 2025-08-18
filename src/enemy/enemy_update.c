@@ -24,4 +24,7 @@ void	enemy_update(t_cub3d *cub3d)
 		+ move * cub3d->enemy.anim_end_pos.x;
 	cub3d->enemy.pos.y = (1 - move) * cub3d->enemy.anim_start_pos.y
 		+ move * cub3d->enemy.anim_end_pos.y;
+	cub3d->enemy.anim_width_half = enemy_anim_side_x(anim_time);
+	cub3d->enemy.anim_y_pos = enemy_anim_bottom_y(anim_time);
+	cub3d->enemy.anim_height = enemy_anim_height_y(anim_time);
 }

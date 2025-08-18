@@ -63,11 +63,12 @@ static float	enemy_anim_squeeze_y(float t)
 	return (enemy_anim_move_y(t));
 }
 
-float	enemy_anim_top_y(float t)
+float	enemy_anim_height_y(float t)
 {
-	return (enemy_anim_move_y(t)
-		+ HEIGHT_BELOW_COM * (1 + HEIGHT_ABOVE_COM_RATIO)
-		+ enemy_anim_squeeze_y(t) * HEIGHT_ABOVE_COM_RATIO);
+	float	vertical_squeezed;
+
+	vertical_squeezed = HEIGHT_BELOW_COM + enemy_anim_squeeze_y(t);
+	return (vertical_squeezed * (1 + HEIGHT_ABOVE_COM_RATIO));
 }
 
 float	enemy_anim_bottom_y(float t)

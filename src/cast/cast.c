@@ -122,4 +122,5 @@ void	cast(t_cub3d *cub3d, t_vec2 pos, t_vec2 dir, t_cast_result *cr)
 			state.intersection_y = intersect_y(pos, dir, state.grid_line_x);
 		}
 	}
+	cast_enemy(&state);
 }

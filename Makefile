@@ -10,6 +10,7 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	main.c \
 	cast/cast.c \
 	cast/cast_door.c \
+	cast/cast_enemy.c \
 	cast/cast_intersect.c \
 	cast/cast_station.c \
 	cast/cast_wall.c \
@@ -20,7 +21,6 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	enemy/enemy_pathing_alloc.c \
 	enemy/enemy_pathing_pq.c \
 	enemy/enemy_pathing.c \
-	enemy/enemy_render.c \
 	enemy/enemy_update.c \
 	input/input.c \
 	map/map.c \

@@ -27,7 +27,7 @@ uint32_t	enemy_pathing_pq_extract(t_enemy_pathing_state *state);
 
 void		enemy_pathing(t_cub3d *cub3d);
 
-float		enemy_anim_top_y(float t);
+float		enemy_anim_height_y(float t);
 float		enemy_anim_bottom_y(float t);
 float		enemy_anim_side_x(float t);
 float		enemy_anim_move_x(float t);

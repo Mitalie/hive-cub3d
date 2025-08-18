@@ -14,6 +14,9 @@ typedef struct s_enemy
 	t_vec2	anim_start_pos;
 	t_vec2	anim_end_pos;
 	float	anim_start_time;
+	float	anim_width_half;
+	float	anim_height;
+	float	anim_y_pos;
 }	t_enemy;
 
 typedef struct s_enemy_pathing_tile	t_enemy_pathing_tile;
@@ -37,7 +40,6 @@ typedef struct s_enemy_pathing_state
 bool	enemy_pathing_alloc(t_cub3d *cub3d);
 void	enemy_pathing_dealloc(t_cub3d *cub3d);
 
-void	enemy_render(t_cub3d *cub3d);
 void	enemy_update(t_cub3d *cub3d);
 
 #endif
