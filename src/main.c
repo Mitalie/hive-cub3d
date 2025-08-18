@@ -123,6 +123,7 @@ int	main(int argc, char **argv)
 
 	gettimeofday(&t, NULL);
 	util_random(t.tv_sec);
+	cub3d = (t_cub3d){};
 	if (argc != 2)
 	{
 		printf("Error\nInvalid arguments, usage: cub3D <path/to/map.cub>\n");
@@ -139,14 +140,13 @@ int	main(int argc, char **argv)
 		map_unload(&cub3d.map);
 		return (1);
 	}
-	cub3d.render = NULL;
 	cub3d.hfov_deg = 90;
 	cub3d.player.x = cub3d.map.player_x + 0.5;
 	cub3d.player.y = cub3d.map.player_y + 0.5;
 	cub3d.player_facing = initial_facing(cub3d.map.player_start);
 	cub3d.enemy.pos.x = cub3d.map.enemy_start_x + 0.5f;
 	cub3d.enemy.pos.y = cub3d.map.enemy_start_y + 0.5f;
-	cub3d.enemy.anim_start_time = -1;
+	cub3d.enemy.anim_start_time = -INFINITY;
 	cub3d.mlx = mlx_init(1920, 1080, "SIM-ulator", true);
 	if (!cub3d.mlx)
 	{

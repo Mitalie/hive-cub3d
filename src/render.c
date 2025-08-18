@@ -15,7 +15,6 @@ static uint32_t	wall_color(t_cub3d *cub3d, t_material material,
 	uint32_t		y;
 	uint8_t			*texel;
 
-	xpos = xpos - floorf(xpos);
 	if (material == MAT_WALL_NORTH)
 		tex = cub3d->map.wall_north;
 	else if (material == MAT_WALL_SOUTH)
@@ -30,8 +29,8 @@ static uint32_t	wall_color(t_cub3d *cub3d, t_material material,
 		tex = cub3d->map.door_side;
 	else
 		return (0xff);
-	x = tex->width * xpos;
-	y = tex->height - tex->height * ypos;
+	x = fmaxf(0.0f, fminf(tex->width - 1, tex->width * xpos));
+	y = fmaxf(0.0f, fminf(tex->height - 1, tex->height * (1 - ypos)));
 	texel = &tex->pixels[tex->bytes_per_pixel * (y * tex->width + x)];
 	return (texel[0] << 24 | texel[1] << 16 | texel[2] << 8 | 0xff);
 }
@@ -43,7 +42,6 @@ uint32_t	sprite_color(t_cub3d *cub3d, t_material material,
 	uint32_t		y;
 	uint8_t			*texel;
 
-	xpos = xpos - floorf(xpos);
 	if (material == MAT_STATION_INACTIVE)
 		tex = cub3d->map.station_inactive;
 	else if (material == MAT_STATION_ACTIVE)
@@ -56,8 +54,8 @@ uint32_t	sprite_color(t_cub3d *cub3d, t_material material,
 		tex = cub3d->map.enemy_texture;
 	else
 		return (0xff);
-	x = tex->width * xpos;
-	y = tex->height - tex->height * ypos;
+	x = fmaxf(0.0f, fminf(tex->width - 1, tex->width * xpos));
+	y = fmaxf(0.0f, fminf(tex->height - 1, tex->height * (1 - ypos)));
 	texel = &tex->pixels[tex->bytes_per_pixel * (y * tex->width + x)];
 	return (texel[0] << 24 | texel[1] << 16 | texel[2] << 8 | texel[3]);
 }
