@@ -32,10 +32,10 @@ static bool	cast_door_yellow(t_cast_state *state, float door_state)
 	{
 		yellow_line_pos = state->tile_x + 0.5f + copysignf(0.5f * door_state, state->dir.x);
 		intersection = intersect_y(state->pos, state->dir, yellow_line_pos);
-		if (isinff(intersection.distance_along_ray) || floorf(intersection.position_on_target) != state->tile_y)
+		if (isinff(intersection.ray_len) || floorf(intersection.tgt_pos) != state->tile_y)
 			return (false);
-		hit->distance = intersection.distance_along_ray;
-		hit->position_in_tile = intersection.position_on_target - floorf(intersection.position_on_target);
+		hit->distance = intersection.ray_len;
+		hit->pos_in_tile = intersection.tgt_pos - floorf(intersection.tgt_pos);
 		hit->material = MAT_DOOR_SIDE;
 		return (true);
 	}
@@ -43,10 +43,10 @@ static bool	cast_door_yellow(t_cast_state *state, float door_state)
 	{
 		yellow_line_pos = state->tile_y + 0.5f + copysignf(0.5f * door_state, state->dir.y);
 		intersection = intersect_x(state->pos, state->dir, yellow_line_pos);
-		if (isinff(intersection.distance_along_ray) || floorf(intersection.position_on_target) != state->tile_x)
+		if (isinff(intersection.ray_len) || floorf(intersection.tgt_pos) != state->tile_x)
 			return (false);
-		hit->distance = intersection.distance_along_ray;
-		hit->position_in_tile = intersection.position_on_target - floorf(intersection.position_on_target);
+		hit->distance = intersection.ray_len;
+		hit->pos_in_tile = intersection.tgt_pos - floorf(intersection.tgt_pos);
 		hit->material = MAT_DOOR_SIDE;
 		return (true);
 	}
@@ -62,7 +62,7 @@ bool	cast_door(t_cast_state *state, t_intersection intersection)
 
 	hit = &state->cr->opaque;
 	door_state = map_door_state(&state->cub3d->map, state->tile_x, state->tile_y);
-	front_pos = intersection.position_on_target;
+	front_pos = intersection.tgt_pos;
 	if (hit->side == HIT_NORTH || hit->side == HIT_EAST)
 		front_pos = ceilf(front_pos) - front_pos;
 	else
@@ -71,15 +71,15 @@ bool	cast_door(t_cast_state *state, t_intersection intersection)
 	green_pos = front_pos - 0.5f * door_state;
 	if (red_pos <= 0.5f)
 	{
-		hit->distance = intersection.distance_along_ray;
-		hit->position_in_tile = red_pos;
+		hit->distance = intersection.ray_len;
+		hit->pos_in_tile = red_pos;
 		hit->material = MAT_DOOR_FACE;
 		return (true);
 	}
 	if (green_pos >= 0.5f)
 	{
-		hit->distance = intersection.distance_along_ray;
-		hit->position_in_tile = green_pos;
+		hit->distance = intersection.ray_len;
+		hit->pos_in_tile = green_pos;
 		hit->material = MAT_DOOR_FACE;
 		return (true);
 	}

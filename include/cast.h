@@ -16,7 +16,7 @@ typedef enum e_side
 typedef struct s_hit
 {
 	float		distance;
-	float		position_in_tile;
+	float		pos_in_tile;
 	t_side		side;
 	t_material	material;
 }	t_hit;

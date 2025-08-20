@@ -24,7 +24,7 @@ static t_hit	*cast_insert_transparent(t_cast_result *cr, float distance)
 	transparent hits list if so.
 
 	Scale of enemy_dir is affected by player_to_enemy distance, and results in
-	incorrectly scaled intersection.position_on_target. Correct it by
+	incorrectly scaled intersection.tgt_pos. Correct it by
 	multiplying with the distance.
 */
 void	cast_enemy(t_cast_state *state)
@@ -41,17 +41,17 @@ void	cast_enemy(t_cast_state *state)
 	enemy_dir.x = player_to_enemy.y;
 	enemy_dir.y = -player_to_enemy.x;
 	intersection = intersect(state->pos, state->dir, enemy->pos, enemy_dir);
-	intersection.position_on_target *= intersection.distance_along_ray;
-	if (intersection.distance_along_ray < 0
-		|| intersection.distance_along_ray > state->cr->opaque.distance
-		|| intersection.position_on_target > enemy->anim_width_half
-		|| intersection.position_on_target < -enemy->anim_width_half)
+	intersection.tgt_pos *= intersection.ray_len;
+	if (intersection.ray_len < 0
+		|| intersection.ray_len > state->cr->opaque.distance
+		|| intersection.tgt_pos > enemy->anim_width_half
+		|| intersection.tgt_pos < -enemy->anim_width_half)
 		return ;
-	slot = cast_insert_transparent(state->cr, intersection.distance_along_ray);
+	slot = cast_insert_transparent(state->cr, intersection.ray_len);
 	if (!slot)
 		return ;
-	slot->distance = intersection.distance_along_ray;
+	slot->distance = intersection.ray_len;
 	slot->material = MAT_ENEMY;
-	slot->position_in_tile = intersection.position_on_target
+	slot->pos_in_tile = intersection.tgt_pos
 		/ enemy->anim_width_half * 0.5f + 0.5f;
 }

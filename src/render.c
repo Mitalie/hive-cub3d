@@ -31,7 +31,7 @@ static bool	render_hit_pixel(t_cub3d *cub3d, t_vec2i pixel,
 		ypos += 0.2f;
 	if (ypos < 0.0f || ypos > 1.0f)
 		return (false);
-	color = material_tex(cub3d, hit->material, hit->position_in_tile, ypos);
+	color = material_tex(cub3d, hit->material, hit->pos_in_tile, ypos);
 	if ((color & 0xff) == 0xff)
 	{
 		mlx_put_pixel(cub3d->render, pixel.x, pixel.y, color);

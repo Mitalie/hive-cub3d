@@ -17,15 +17,15 @@ bool	cast_station(t_cast_state *state, t_map_tile tile)
 		return (false);
 	station_y = state->tile_y + 0.5f;
 	intersection = intersect_x(state->pos, state->dir, station_y);
-	pos_in_tile = intersection.position_on_target - state->tile_x;
+	pos_in_tile = intersection.tgt_pos - state->tile_x;
 	if (pos_in_tile >= 0.0f && pos_in_tile < 1.0f)
 	{
 		hit = &state->cr->transparent[state->cr->num_transparent++];
-		hit->distance = intersection.distance_along_ray;
+		hit->distance = intersection.ray_len;
 		if (state->dir.y < 0)
-			hit->position_in_tile = pos_in_tile;
+			hit->pos_in_tile = pos_in_tile;
 		else
-			hit->position_in_tile = 1.0f - pos_in_tile;
+			hit->pos_in_tile = 1.0f - pos_in_tile;
 		if ((state->dir.y < 0) == (tile == TILE_STATION_N))
 		{
 			hit->material = MAT_TGT_BACK;

@@ -12,8 +12,8 @@ bool	cast_wall(t_cast_state *state, t_intersection intersection)
 	t_hit	*hit;
 
 	hit = &state->cr->opaque;
-	hit->distance = intersection.distance_along_ray;
-	position = intersection.position_on_target;
+	hit->distance = intersection.ray_len;
+	position = intersection.tgt_pos;
 	if (hit->side == HIT_NORTH)
 		hit->material = MAT_WALL_NORTH;
 	if (hit->side == HIT_SOUTH)
@@ -23,8 +23,8 @@ bool	cast_wall(t_cast_state *state, t_intersection intersection)
 	if (hit->side == HIT_WEST)
 		hit->material = MAT_WALL_WEST;
 	if (hit->side == HIT_NORTH || hit->side == HIT_EAST)
-		hit->position_in_tile = ceilf(position) - position;
+		hit->pos_in_tile = ceilf(position) - position;
 	else
-		hit->position_in_tile = position - floorf(position);
+		hit->pos_in_tile = position - floorf(position);
 	return (true);
 }

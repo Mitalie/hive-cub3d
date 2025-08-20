@@ -10,8 +10,8 @@
 
 typedef struct s_intersection
 {
-	float	distance_along_ray;
-	float	position_on_target;
+	float	ray_len;
+	float	tgt_pos;
 }	t_intersection;
 
 t_intersection	intersect_x(t_vec2 ray_start, t_vec2 ray_dir, float target_y);
@@ -29,8 +29,8 @@ typedef struct s_cast_state
 	t_vec2			dir;
 	float			grid_line_x;
 	float			grid_line_y;
-	t_intersection	intersection_x;
-	t_intersection	intersection_y;
+	t_intersection	int_x;
+	t_intersection	int_y;
 }	t_cast_state;
 
 bool			cast_wall(t_cast_state *state, t_intersection intersection);
