@@ -4,10 +4,26 @@
 #include <stdbool.h>
 
 #include "cub3d.h"
+#include "material.h"
+
+static t_material	cast_station_material(t_cast_state *state, t_map_tile tile)
+{
+	t_target	*target;
+
+	if ((state->dir.y < 0) == (tile == TILE_STATION_N))
+		return (MAT_TGT_BACK);
+	target = map_target(&state->cub3d->map,
+			state->tile_x, state->tile_y);
+	if (!target)
+		return (MAT_TGT_INACTIVE);
+	else if (target->completed)
+		return (MAT_TGT_COMPLETED);
+	else
+		return (MAT_TGT_ACTIVE);
+}
 
 bool	cast_station(t_cast_state *state, t_map_tile tile)
 {
-	t_target		*target;
 	float			station_y;
 	float			pos_in_tile;
 	t_intersection	intersection;
@@ -26,18 +42,7 @@ bool	cast_station(t_cast_state *state, t_map_tile tile)
 			hit->pos_in_tile = pos_in_tile;
 		else
 			hit->pos_in_tile = 1.0f - pos_in_tile;
-		if ((state->dir.y < 0) == (tile == TILE_STATION_N))
-		{
-			hit->material = MAT_TGT_BACK;
-			return (false);
-		}
-		target = map_target(&state->cub3d->map, state->tile_x, state->tile_y);
-		if (!target)
-			hit->material = MAT_TGT_INACTIVE;
-		else if (target->completed)
-			hit->material = MAT_TGT_COMPLETED;
-		else
-			hit->material = MAT_TGT_ACTIVE;
+		hit->material = cast_station_material(state, tile);
 	}
 	return (false);
 }
