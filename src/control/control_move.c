@@ -51,7 +51,8 @@ static bool	control_check_wall(
 	if (tile == TILE_WALL || tile == TILE_STATION_N || tile == TILE_STATION_S)
 		return (true);
 	if (tile == TILE_DOOR_NS || tile == TILE_DOOR_EW)
-		return (map_door_state(&cub3d->map, x, y) < 1.0f);
+		return (map_door_state(
+				&cub3d->map, x, y, cub3d->frame_timestamp) < 1.0f);
 	return (false);
 }
 

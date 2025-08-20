@@ -27,7 +27,7 @@ t_map_tile	map_tile(t_map *map, int x, int y)
 	return (TILE_EMPTY);
 }
 
-float	map_door_state(t_map *map, int x, int y)
+float	map_door_state(t_map *map, int x, int y, float frame_timestamp)
 {
 	uint32_t	i;
 	t_door		*door;
@@ -45,7 +45,7 @@ float	map_door_state(t_map *map, int x, int y)
 		door = &map->doors[i++];
 		if (door->x == (uint32_t)x && door->y == (uint32_t)y)
 		{
-			anim_time = mlx_get_time() - door->anim_start_time;
+			anim_time = frame_timestamp - door->anim_start_time;
 			state = fminf(2.0f * anim_time, -2.0f * (anim_time - 4.0f));
 			return (fmaxf(0.0f, fminf(1.0f, state)));
 		}

@@ -70,8 +70,8 @@ bool	cast_door(t_cast_state *state, t_intersection intersection)
 	float	door_state;
 
 	hit = &state->cr->opaque;
-	door_state = map_door_state(
-			&state->cub3d->map, state->tile_x, state->tile_y);
+	door_state = map_door_state(&state->cub3d->map, state->tile_x,
+			state->tile_y, state->cub3d->frame_timestamp);
 	if (cast_door_face(hit, door_state, intersection))
 		return (true);
 	if (hit->side == HIT_NORTH || hit->side == HIT_SOUTH)
