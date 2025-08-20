@@ -66,9 +66,6 @@ typedef struct s_map
 	t_target		targets[MAX_TARGETS];
 }	t_map;
 
-bool		map_load(t_map *map, const char *path);
-void		map_unload(t_map *map);
-
 typedef enum e_map_tile
 {
 	TILE_EMPTY,
@@ -79,8 +76,12 @@ typedef enum e_map_tile
 	TILE_STATION_S,
 }	t_map_tile;
 
-t_map_tile	map_tile(t_map *map, int x, int y);
-float		map_door_state(t_map *map, int x, int y, float frame_timestamp);
-t_target	*map_target(t_map *map, int x, int y);
+bool			map_load(t_map *map, const char *path);
+void			map_unload(t_map *map);
+
+t_map_tile		map_tile(t_map *map, int x, int y);
+float			map_door_state(t_map *map, int x, int y, float frame_timestamp);
+t_target		*map_target(t_map *map, int x, int y);
+mlx_texture_t	*map_target_completed_tex(t_map *map, float frame_timestamp);
 
 #endif

@@ -24,6 +24,7 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	enemy/enemy_pathing_pq.c \
 	enemy/enemy_pathing.c \
 	enemy/enemy_update.c \
+	hooks.c \
 	input/input.c \
 	map/map.c \
 	map/map_grid.c \
@@ -34,7 +35,8 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	material.c \
 	minimap/minimap_render.c \
 	minimap/minimap_setup.c \
-	render.c \
+	render/render.c \
+	render/render_setup.c \
 	util/util_error.c \
 	util/util_mem.c \
 	util/util_parse_int.c \

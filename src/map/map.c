@@ -72,3 +72,18 @@ t_target	*map_target(t_map *map, int x, int y)
 	}
 	return (NULL);
 }
+
+mlx_texture_t	*map_target_completed_tex(t_map *map, float frame_timestamp)
+{
+	float	completed_anim_time;
+
+	completed_anim_time = fmodf(frame_timestamp, 4.0f);
+	if (completed_anim_time < 1.0f)
+		return (map->textures[TEX_TGT_COMPLETED1]);
+	else if (completed_anim_time < 2.0f)
+		return (map->textures[TEX_TGT_COMPLETED2]);
+	else if (completed_anim_time < 3.0f)
+		return (map->textures[TEX_TGT_COMPLETED3]);
+	else
+		return (map->textures[TEX_TGT_COMPLETED4]);
+}

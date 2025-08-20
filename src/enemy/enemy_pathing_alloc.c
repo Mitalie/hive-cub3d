@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include "cub3d.h"
+#include "util.h"
 
 bool	enemy_pathing_alloc(t_cub3d *cub3d)
 {
@@ -16,8 +17,10 @@ bool	enemy_pathing_alloc(t_cub3d *cub3d)
 	cub3d->enemy_pathing.pq = malloc(
 			map_size * sizeof(*cub3d->enemy_pathing.pq));
 	cub3d->enemy_pathing.pq_size = 0;
-	return (cub3d->enemy_pathing.tiles != NULL
-		&& cub3d->enemy_pathing.pq != NULL);
+	if (cub3d->enemy_pathing.tiles != NULL
+		&& cub3d->enemy_pathing.pq != NULL)
+		return (true);
+	return (util_err_false("Initializing pathfinding failed", "malloc failed"));
 }
 
 void	enemy_pathing_dealloc(t_cub3d *cub3d)
