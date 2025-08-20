@@ -15,6 +15,7 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	cast/cast_station.c \
 	cast/cast_wall.c \
 	color.c \
+	control/control_interact.c \
 	control/control_move.c \
 	control/control_turn.c \
 	enemy/enemy_anim.c \

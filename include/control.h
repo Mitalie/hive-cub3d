@@ -16,4 +16,7 @@ enum e_control_move_dir
 void	control_move(t_cub3d *cub3d, int arg, float time);
 void	control_turn(t_cub3d *cub3d, int arg, float time);
 
+void	control_interact_door(t_cub3d *cub3d);
+void	control_interact_target(t_cub3d *cub3d);
+
 #endif

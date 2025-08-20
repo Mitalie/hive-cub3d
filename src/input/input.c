@@ -71,45 +71,11 @@ void	input_cursor(t_cub3d *cub3d, float dx, float dy)
 
 void	input_simple_action(t_cub3d *cub3d, int arg)
 {
-	uint32_t	i;
-	float		distx;
-	float		disty;
-	float		distsq;
-	float		door_anim_time;
-
 	if (arg == INPUT_CLOSE)
 		mlx_close_window(cub3d->mlx);
 	if (arg == INPUT_INTERACT)
 	{
-		i = 0;
-		while (i < cub3d->map.num_doors)
-		{
-			distx = cub3d->player.x - (cub3d->map.doors[i].x + 0.5f);
-			disty = cub3d->player.y - (cub3d->map.doors[i].y + 0.5f);
-			distsq = distx * distx + disty * disty;
-			if (distsq < 1.44f)
-			{
-				door_anim_time = mlx_get_time() - cub3d->map.doors[i].anim_start_time;
-				if (door_anim_time < 0.5f)
-					;
-				else if (door_anim_time < 3.5f)
-					cub3d->map.doors[i].anim_start_time = mlx_get_time() - 0.5f;
-				else if (door_anim_time < 4.0f)
-					cub3d->map.doors[i].anim_start_time = mlx_get_time() - (4.0f - door_anim_time);
-				else
-					cub3d->map.doors[i].anim_start_time = mlx_get_time();
-			}
-			i++;
-		}
-		i = 0;
-		while (i < cub3d->map.num_targets)
-		{
-			distx = cub3d->player.x - (cub3d->map.targets[i].x + 0.5f);
-			disty = cub3d->player.y - (cub3d->map.targets[i].y + 0.5f);
-			distsq = distx * distx + disty * disty;
-			if (distsq < 1.44f)
-				cub3d->map.targets[i].completed = true;
-			i++;
-		}
+		control_interact_door(cub3d);
+		control_interact_target(cub3d);
 	}
 }
