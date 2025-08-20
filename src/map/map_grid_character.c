@@ -14,6 +14,7 @@ static bool	map_grid_door(t_map *map, uint32_t x, uint32_t y)
 	map->doors[map->num_doors].y = y;
 	map->doors[map->num_doors].anim_start_time = -INFINITY;
 	map->num_doors++;
+	map->features |= FEAT_DOOR;
 	return (true);
 }
 
@@ -52,6 +53,7 @@ static bool	map_grid_station(t_map *map, uint32_t x, uint32_t y)
 	map->targets[index].y = y;
 	map->targets[index].completed = false;
 	map->num_targets++;
+	map->features |= FEAT_TGT;
 	return (true);
 }
 
@@ -72,6 +74,7 @@ static bool	map_grid_enemy(t_map *map, uint32_t x, uint32_t y)
 	map->has_enemy = true;
 	map->enemy_start_x = x;
 	map->enemy_start_y = y;
+	map->features |= FEAT_ENEMY;
 	return (true);
 }
 

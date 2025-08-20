@@ -8,6 +8,7 @@
 typedef struct s_map_tex_param
 {
 	const char		*name;
+	t_map_feature	feature;
 	t_map_texture	idx;
 }	t_map_tex_param;
 

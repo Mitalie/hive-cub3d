@@ -46,6 +46,13 @@ typedef enum e_map_texture
 	NUM_MAP_TEXTURES,
 }	t_map_texture;
 
+typedef enum e_map_features
+{
+	FEAT_DOOR = 1,
+	FEAT_TGT = 2,
+	FEAT_ENEMY = 4,
+}	t_map_feature;
+
 typedef struct s_map
 {
 	uint32_t		width;
@@ -64,6 +71,7 @@ typedef struct s_map
 	t_door			doors[MAX_DOORS];
 	uint32_t		num_targets;
 	t_target		targets[MAX_TARGETS];
+	t_map_feature	features;
 }	t_map;
 
 typedef enum e_map_tile

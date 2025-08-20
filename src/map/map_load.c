@@ -106,6 +106,7 @@ bool	map_load(t_map *map, const char *path)
 	map->has_enemy = false;
 	map->num_doors = 0;
 	map->num_targets = 0;
+	map->features = 0;
 	success = map_parse(map, file_data);
 	free(file_data);
 	return (success);

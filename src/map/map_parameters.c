@@ -62,20 +62,20 @@ static bool	map_parse_color(uint32_t *color_out, char **file_data)
 }
 
 static const t_map_tex_param	g_map_tex_params[NUM_MAP_TEXTURES] = {
-{"NO", TEX_WALL_NORTH},
-{"SO", TEX_WALL_SOUTH},
-{"EA", TEX_WALL_EAST},
-{"WE", TEX_WALL_WEST},
-{"DF", TEX_DOOR_FACE},
-{"DS", TEX_DOOR_SIDE},
-{"SI", TEX_TGT_INACTIVE},
-{"SA", TEX_TGT_ACTIVE},
-{"SB", TEX_TGT_BACK},
-{"S1", TEX_TGT_COMPLETED1},
-{"S2", TEX_TGT_COMPLETED2},
-{"S3", TEX_TGT_COMPLETED3},
-{"S4", TEX_TGT_COMPLETED4},
-{"EN", TEX_ENEMY},
+{"NO", 0, TEX_WALL_NORTH},
+{"SO", 0, TEX_WALL_SOUTH},
+{"EA", 0, TEX_WALL_EAST},
+{"WE", 0, TEX_WALL_WEST},
+{"DF", FEAT_DOOR, TEX_DOOR_FACE},
+{"DS", FEAT_DOOR, TEX_DOOR_SIDE},
+{"SI", FEAT_TGT, TEX_TGT_INACTIVE},
+{"SA", FEAT_TGT, TEX_TGT_ACTIVE},
+{"SB", FEAT_TGT, TEX_TGT_BACK},
+{"S1", FEAT_TGT, TEX_TGT_COMPLETED1},
+{"S2", FEAT_TGT, TEX_TGT_COMPLETED2},
+{"S3", FEAT_TGT, TEX_TGT_COMPLETED3},
+{"S4", FEAT_TGT, TEX_TGT_COMPLETED4},
+{"EN", FEAT_ENEMY, TEX_ENEMY},
 };
 
 bool	map_parse_parameter(t_map *map, char **file_data)
@@ -95,13 +95,19 @@ bool	map_parse_parameter(t_map *map, char **file_data)
 		return (util_err_false("Map error", "unrecognized parameter"));
 }
 
+/*
+	Texture is required if it's either not optional (.feature == 0) or its
+	feature is in use ((.feature bitwise-AND map->features) != 0).
+*/
 bool	map_verify_parameters(t_map *map)
 {
 	size_t	i;
 
 	i = -1;
 	while (++i < NUM_MAP_TEXTURES)
-		if (map->textures[i] == NULL)
+		if ((!g_map_tex_params[i].feature
+				|| map->features & g_map_tex_params[i].feature)
+			&& map->textures[g_map_tex_params[i].idx] == NULL)
 			return (util_err_false("Map error",
 					"missing one or more parameters"));
 	if (map->color_ceil == 0

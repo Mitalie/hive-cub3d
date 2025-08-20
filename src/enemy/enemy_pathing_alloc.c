@@ -11,6 +11,8 @@ bool	enemy_pathing_alloc(t_cub3d *cub3d)
 {
 	uint32_t	map_size;
 
+	if (!(cub3d->map.features & FEAT_ENEMY))
+		return (true);
 	map_size = cub3d->map.width * cub3d->map.height;
 	cub3d->enemy_pathing.tiles = malloc(
 			map_size * sizeof(*cub3d->enemy_pathing.tiles));
