@@ -24,10 +24,10 @@ static bool	render_hit_pixel(t_cub3d *cub3d, t_vec2i pixel,
 	ypos = tan_vert * hit->distance + 0.5f;
 	if (hit->material == MAT_ENEMY)
 		ypos = (ypos - cub3d->enemy.anim_y_pos) / cub3d->enemy.anim_height;
-	else if (hit->material == MAT_STATION_INACTIVE
-		|| hit->material == MAT_STATION_ACTIVE
-		|| hit->material == MAT_STATION_COMPLETED
-		|| hit->material == MAT_STATION_BACK)
+	else if (hit->material == MAT_TGT_INACTIVE
+		|| hit->material == MAT_TGT_ACTIVE
+		|| hit->material == MAT_TGT_COMPLETED
+		|| hit->material == MAT_TGT_BACK)
 		ypos += 0.2f;
 	if (ypos < 0.0f || ypos > 1.0f)
 		return (false);

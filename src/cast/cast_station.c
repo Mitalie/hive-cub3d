@@ -28,16 +28,16 @@ bool	cast_station(t_cast_state *state, t_map_tile tile)
 			hit->position_in_tile = 1.0f - pos_in_tile;
 		if ((state->dir.y < 0) == (tile == TILE_STATION_N))
 		{
-			hit->material = MAT_STATION_BACK;
+			hit->material = MAT_TGT_BACK;
 			return (false);
 		}
 		target = map_target(&state->cub3d->map, state->tile_x, state->tile_y);
 		if (!target)
-			hit->material = MAT_STATION_INACTIVE;
+			hit->material = MAT_TGT_INACTIVE;
 		else if (target->completed)
-			hit->material = MAT_STATION_COMPLETED;
+			hit->material = MAT_TGT_COMPLETED;
 		else
-			hit->material = MAT_STATION_ACTIVE;
+			hit->material = MAT_TGT_ACTIVE;
 	}
 	return (false);
 }

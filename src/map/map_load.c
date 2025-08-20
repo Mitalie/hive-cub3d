@@ -13,10 +13,12 @@
 
 void	map_unload(t_map *map)
 {
-	mlx_delete_texture(map->wall_north);
-	mlx_delete_texture(map->wall_south);
-	mlx_delete_texture(map->wall_east);
-	mlx_delete_texture(map->wall_west);
+	size_t	tex_idx;
+
+	tex_idx = -1;
+	while (++tex_idx < NUM_MAP_TEXTURES)
+		if (map->textures[tex_idx])
+			mlx_delete_texture(map->textures[tex_idx]);
 	free(map->grid);
 }
 
@@ -95,15 +97,13 @@ bool	map_load(t_map *map, const char *path)
 	file_data = map_load_file(path);
 	if (!file_data)
 		return (util_errno_false("Loading map file failed", path));
-	map->wall_north = NULL;
-	map->wall_south = NULL;
-	map->wall_east = NULL;
-	map->wall_west = NULL;
+	i = -1;
+	while (++i < NUM_MAP_TEXTURES)
+		map->textures[i] = NULL;
 	map->color_ceil = 0;
 	map->color_floor = 0;
 	map->player_start = '\0';
 	map->has_enemy = false;
-	map->enemy_texture = NULL;
 	map->num_doors = 0;
 	map->num_targets = 0;
 	success = map_parse(map, file_data);

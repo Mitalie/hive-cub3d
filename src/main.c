@@ -57,6 +57,7 @@ void	loop_hook(void *param)
 {
 	t_cub3d	*cub3d;
 	int32_t	unused;
+	float	completed_anim_time;
 
 	cub3d = param;
 	if (!image_setup(cub3d) || !minimap_setup(cub3d))
@@ -65,17 +66,15 @@ void	loop_hook(void *param)
 		return ;
 	}
 	cub3d->frame_timestamp = mlx_get_time();
-	{
-		float a = fmodf(mlx_get_time(), 4.0f);
-		if (a > 3.0f)
-			cub3d->target_completed_tex = cub3d->map.station_completed4;
-		else if (a > 2.0f)
-			cub3d->target_completed_tex = cub3d->map.station_completed3;
-		else if (a > 1.0f)
-			cub3d->target_completed_tex = cub3d->map.station_completed2;
-		else
-			cub3d->target_completed_tex = cub3d->map.station_completed1;
-	}
+	completed_anim_time = fmodf(cub3d->frame_timestamp, 4.0f);
+	if (completed_anim_time < 1.0f)
+		cub3d->target_completed_tex = cub3d->map.textures[TEX_TGT_COMPLETED1];
+	else if (completed_anim_time < 2.0f)
+		cub3d->target_completed_tex = cub3d->map.textures[TEX_TGT_COMPLETED2];
+	else if (completed_anim_time < 3.0f)
+		cub3d->target_completed_tex = cub3d->map.textures[TEX_TGT_COMPLETED3];
+	else
+		cub3d->target_completed_tex = cub3d->map.textures[TEX_TGT_COMPLETED4];
 	input_timed(cub3d);
 	enemy_update(cub3d);
 	render_view(cub3d);

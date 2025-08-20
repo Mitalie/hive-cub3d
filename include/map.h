@@ -27,25 +27,31 @@ typedef struct s_target
 	bool		completed;
 }	t_target;
 
+typedef enum e_map_texture
+{
+	TEX_WALL_NORTH,
+	TEX_WALL_SOUTH,
+	TEX_WALL_EAST,
+	TEX_WALL_WEST,
+	TEX_DOOR_FACE,
+	TEX_DOOR_SIDE,
+	TEX_TGT_INACTIVE,
+	TEX_TGT_ACTIVE,
+	TEX_TGT_BACK,
+	TEX_TGT_COMPLETED1,
+	TEX_TGT_COMPLETED2,
+	TEX_TGT_COMPLETED3,
+	TEX_TGT_COMPLETED4,
+	TEX_ENEMY,
+	NUM_MAP_TEXTURES,
+}	t_map_texture;
+
 typedef struct s_map
 {
 	uint32_t		width;
 	uint32_t		height;
 	char			*grid;
-	mlx_texture_t	*wall_north;
-	mlx_texture_t	*wall_south;
-	mlx_texture_t	*wall_east;
-	mlx_texture_t	*wall_west;
-	mlx_texture_t	*door_face;
-	mlx_texture_t	*door_side;
-	mlx_texture_t	*station_inactive;
-	mlx_texture_t	*station_active;
-	mlx_texture_t	*station_back;
-	mlx_texture_t	*station_completed1;
-	mlx_texture_t	*station_completed2;
-	mlx_texture_t	*station_completed3;
-	mlx_texture_t	*station_completed4;
-	mlx_texture_t	*enemy_texture;
+	mlx_texture_t	*textures[NUM_MAP_TEXTURES];
 	uint32_t		color_floor;
 	uint32_t		color_ceil;
 	uint32_t		player_x;

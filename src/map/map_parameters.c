@@ -60,37 +60,33 @@ static bool	map_parse_color(uint32_t *color_out, char **file_data)
 	return (true);
 }
 
+static const t_map_tex_param	g_map_tex_params[NUM_MAP_TEXTURES] = {
+{"NO", TEX_WALL_NORTH},
+{"SO", TEX_WALL_SOUTH},
+{"EA", TEX_WALL_EAST},
+{"WE", TEX_WALL_WEST},
+{"DF", TEX_DOOR_FACE},
+{"DS", TEX_DOOR_SIDE},
+{"SI", TEX_TGT_INACTIVE},
+{"SA", TEX_TGT_ACTIVE},
+{"SB", TEX_TGT_BACK},
+{"S1", TEX_TGT_COMPLETED1},
+{"S2", TEX_TGT_COMPLETED2},
+{"S3", TEX_TGT_COMPLETED3},
+{"S4", TEX_TGT_COMPLETED4},
+{"EN", TEX_ENEMY},
+};
+
 bool	map_parse_parameter(t_map *map, char **file_data)
 {
-	if (util_memcmp(*file_data, "NO", 2) == 0)
-		return (map_parse_wall(&map->wall_north, file_data));
-	else if (util_memcmp(*file_data, "SO", 2) == 0)
-		return (map_parse_wall(&map->wall_south, file_data));
-	else if (util_memcmp(*file_data, "EA", 2) == 0)
-		return (map_parse_wall(&map->wall_east, file_data));
-	else if (util_memcmp(*file_data, "WE", 2) == 0)
-		return (map_parse_wall(&map->wall_west, file_data));
-	else if (util_memcmp(*file_data, "DF", 2) == 0)
-		return (map_parse_wall(&map->door_face, file_data));
-	else if (util_memcmp(*file_data, "DS", 2) == 0)
-		return (map_parse_wall(&map->door_side, file_data));
-	else if (util_memcmp(*file_data, "SI", 2) == 0)
-		return (map_parse_wall(&map->station_inactive, file_data));
-	else if (util_memcmp(*file_data, "SA", 2) == 0)
-		return (map_parse_wall(&map->station_active, file_data));
-	else if (util_memcmp(*file_data, "SB", 2) == 0)
-		return (map_parse_wall(&map->station_back, file_data));
-	else if (util_memcmp(*file_data, "S1", 2) == 0)
-		return (map_parse_wall(&map->station_completed1, file_data));
-	else if (util_memcmp(*file_data, "S2", 2) == 0)
-		return (map_parse_wall(&map->station_completed2, file_data));
-	else if (util_memcmp(*file_data, "S3", 2) == 0)
-		return (map_parse_wall(&map->station_completed3, file_data));
-	else if (util_memcmp(*file_data, "S4", 2) == 0)
-		return (map_parse_wall(&map->station_completed4, file_data));
-	else if (util_memcmp(*file_data, "EN", 2) == 0)
-		return (map_parse_wall(&map->enemy_texture, file_data));
-	else if (**file_data == 'C')
+	size_t	i;
+
+	i = -1;
+	while (++i < NUM_MAP_TEXTURES)
+		if (util_memcmp(*file_data, g_map_tex_params[i].name, 2) == 0)
+			return (map_parse_wall(
+					&map->textures[g_map_tex_params[i].idx], file_data));
+	if (**file_data == 'C')
 		return (map_parse_color(&map->color_ceil, file_data));
 	else if (**file_data == 'F')
 		return (map_parse_color(&map->color_floor, file_data));
@@ -98,26 +94,16 @@ bool	map_parse_parameter(t_map *map, char **file_data)
 		return (util_err_false("Map error", "unrecognized parameter"));
 }
 
-/*
-	TODO: reject duplicate parameters
-*/
 bool	map_verify_parameters(t_map *map)
 {
-	if (map->wall_north == NULL
-		|| map->wall_south == NULL
-		|| map->wall_east == NULL
-		|| map->wall_west == NULL
-		|| map->door_face == NULL
-		|| map->door_side == NULL
-		|| map->station_inactive == NULL
-		|| map->station_active == NULL
-		|| map->station_back == NULL
-		|| map->station_completed1 == NULL
-		|| map->station_completed2 == NULL
-		|| map->station_completed3 == NULL
-		|| map->station_completed4 == NULL
-		|| map->enemy_texture == NULL
-		|| map->color_ceil == 0
+	size_t	i;
+
+	i = -1;
+	while (++i < NUM_MAP_TEXTURES)
+		if (map->textures[i] == NULL)
+			return (util_err_false("Map error",
+					"missing one or more parameters"));
+	if (map->color_ceil == 0
 		|| map->color_floor == 0)
 		return (util_err_false("Map error", "missing one or more parameters"));
 	return (true);

@@ -9,27 +9,27 @@ static mlx_texture_t	*material_to_texture(t_cub3d *cub3d,
 	t_material material)
 {
 	if (material == MAT_WALL_NORTH)
-		return (cub3d->map.wall_north);
+		return (cub3d->map.textures[TEX_WALL_NORTH]);
 	else if (material == MAT_WALL_SOUTH)
-		return (cub3d->map.wall_south);
+		return (cub3d->map.textures[TEX_WALL_SOUTH]);
 	else if (material == MAT_WALL_WEST)
-		return (cub3d->map.wall_west);
+		return (cub3d->map.textures[TEX_WALL_WEST]);
 	else if (material == MAT_WALL_EAST)
-		return (cub3d->map.wall_east);
+		return (cub3d->map.textures[TEX_WALL_EAST]);
 	else if (material == MAT_DOOR_FACE)
-		return (cub3d->map.door_face);
+		return (cub3d->map.textures[TEX_DOOR_FACE]);
 	else if (material == MAT_DOOR_SIDE)
-		return (cub3d->map.door_side);
-	else if (material == MAT_STATION_INACTIVE)
-		return (cub3d->map.station_inactive);
-	else if (material == MAT_STATION_ACTIVE)
-		return (cub3d->map.station_active);
-	else if (material == MAT_STATION_BACK)
-		return (cub3d->map.station_back);
-	else if (material == MAT_STATION_COMPLETED)
+		return (cub3d->map.textures[TEX_DOOR_SIDE]);
+	else if (material == MAT_TGT_INACTIVE)
+		return (cub3d->map.textures[TEX_TGT_INACTIVE]);
+	else if (material == MAT_TGT_ACTIVE)
+		return (cub3d->map.textures[TEX_TGT_ACTIVE]);
+	else if (material == MAT_TGT_BACK)
+		return (cub3d->map.textures[TEX_TGT_BACK]);
+	else if (material == MAT_TGT_COMPLETED)
 		return (cub3d->target_completed_tex);
 	else if (material == MAT_ENEMY)
-		return (cub3d->map.enemy_texture);
+		return (cub3d->map.textures[TEX_ENEMY]);
 	return (NULL);
 }
 
