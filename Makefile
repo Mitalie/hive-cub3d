@@ -18,7 +18,8 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	control/control_interact.c \
 	control/control_move.c \
 	control/control_turn.c \
-	enemy/enemy_anim.c \
+	enemy/anim/enemy_anim.c \
+	enemy/anim/enemy_anim_move_y.c \
 	enemy/enemy_pathing_alloc.c \
 	enemy/enemy_pathing_pq.c \
 	enemy/enemy_pathing.c \

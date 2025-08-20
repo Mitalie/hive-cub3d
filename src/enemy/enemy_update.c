@@ -3,6 +3,12 @@
 
 #include "cub3d.h"
 
+/*
+	We expect enemy_pathing to update anim_end_pos to the next tile along the
+	path from enemy to player, but initialize to current position in case no
+	path exists.
+*/
+
 void	enemy_update(t_cub3d *cub3d)
 {
 	float	anim_time;
@@ -16,6 +22,8 @@ void	enemy_update(t_cub3d *cub3d)
 			cub3d->enemy.anim_start_time += 2;
 		cub3d->enemy.anim_start_pos.x = cub3d->enemy.pos.x;
 		cub3d->enemy.anim_start_pos.y = cub3d->enemy.pos.y;
+		cub3d->enemy.anim_end_pos.x = cub3d->enemy.pos.x;
+		cub3d->enemy.anim_end_pos.y = cub3d->enemy.pos.y;
 		enemy_pathing(cub3d);
 	}
 	anim_time = cub3d->frame_timestamp - cub3d->enemy.anim_start_time;
