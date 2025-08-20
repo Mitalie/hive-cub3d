@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "MLX42/MLX42.h"
 
+#include "color.h"
 #include "cub3d.h"
 #include "vec2.h"
 
@@ -34,9 +35,11 @@ static void	minimap_render_bg_row(t_cub3d *cub3d, int row,
 		if (x * x > circle_limit)
 			mlx_put_pixel(cub3d->minimap.bg, col, row, 0);
 		else if (x > cone_limit && x < -cone_limit)
-			mlx_put_pixel(cub3d->minimap.bg, col, row, 0x2f2f9066);
+			mlx_put_pixel(cub3d->minimap.bg, col, row,
+				color_create(0x2f, 0x2f, 0x90, 0x66));
 		else
-			mlx_put_pixel(cub3d->minimap.bg, col, row, 0x2f2f9044);
+			mlx_put_pixel(cub3d->minimap.bg, col, row,
+				color_create(0x2f, 0x2f, 0x90, 0x44));
 	}
 }
 
@@ -141,7 +144,7 @@ void	minimap_render_fg(t_cub3d *cub3d)
 			alpha = minimap_fg_pixel_alpha(&targets, x, y,
 					blip_radius_pixels_sq);
 			mlx_put_pixel(cub3d->minimap.fg, x, y,
-				0xff << 24 | (uint8_t)(alpha * 0xff));
+				color_create(0xff, 0, 0, alpha * 0xff));
 		}
 	}
 }

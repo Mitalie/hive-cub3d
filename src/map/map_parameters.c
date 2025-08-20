@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include "MLX42/MLX42.h"
 
+#include "color.h"
 #include "util.h"
 
 static bool	map_parse_wall(mlx_texture_t **wall_out, char **file_data)
@@ -56,7 +57,7 @@ static bool	map_parse_color(uint32_t *color_out, char **file_data)
 		(*file_data)++;
 	if (!util_parse_uint8(file_data, &blue))
 		return (util_err_false("Map error", "invalid color value"));
-	*color_out = red << 24 | green << 16 | blue << 8 | 0xff;
+	*color_out = color_create(red, green, blue, 0xff);
 	return (true);
 }
 

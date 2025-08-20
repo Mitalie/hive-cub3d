@@ -3,6 +3,7 @@
 #include "MLX42/MLX42.h"
 
 #include "cast.h"
+#include "color.h"
 #include "cub3d.h"
 
 static mlx_texture_t	*material_to_texture(t_cub3d *cub3d,
@@ -47,5 +48,5 @@ uint32_t	material_tex(t_cub3d *cub3d, t_material material,
 	x = fmaxf(0.0f, fminf(tex->width - 1, tex->width * xpos));
 	y = fmaxf(0.0f, fminf(tex->height - 1, tex->height * (1 - ypos)));
 	texel = &tex->pixels[tex->bytes_per_pixel * (y * tex->width + x)];
-	return (texel[0] << 24 | texel[1] << 16 | texel[2] << 8 | texel[3]);
+	return (color_create(texel[0], texel[1], texel[2], texel[3]));
 }
