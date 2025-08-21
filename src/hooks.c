@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hooks.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amakinen <amakinen@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/21 15:23:14 by amakinen          #+#    #+#             */
+/*   Updated: 2025/08/21 15:23:20 by amakinen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "hooks.h"
 
 #include <stdbool.h>
@@ -44,7 +56,6 @@ void	loop_hook(void *param)
 	render_view(cub3d);
 	minimap_render_fg(cub3d);
 	mlx_get_window_pos(cub3d->mlx, &unused, &unused);
-	//printf("%f\n", cub3d->mlx->delta_time);
 }
 
 void	key_hook(mlx_key_data_t data, void *param)
