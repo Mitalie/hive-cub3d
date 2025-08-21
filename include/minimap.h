@@ -1,6 +1,7 @@
 #ifndef MINIMAP_H
 # define MINIMAP_H
 
+# include <stdbool.h>
 # include <stdint.h>
 # include "MLX42/MLX42.h"
 

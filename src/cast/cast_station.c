@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "cub3d.h"
+#include "map.h"
 #include "material.h"
 
 static t_material	cast_station_material(t_cast_state *state, t_map_tile tile)

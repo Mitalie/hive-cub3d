@@ -1,10 +1,12 @@
 #include "enemy.h"
 #include "enemy_internal.h"
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 
 #include "cub3d.h"
+#include "map.h"
 #include "util.h"
 
 bool	enemy_pathing_alloc(t_cub3d *cub3d)

@@ -1,6 +1,8 @@
 #include "enemy_internal.h"
 #include "enemy.h"
 
+#include <stdint.h>
+
 /*
 	Priority queue for use in pathfinding. Based on a binary min-heap where
 	each node always stores a lower value that its children. Therefore the

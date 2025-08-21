@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdbool.h>
 
-#include "cub3d.h"
+#include "material.h"
 
 bool	cast_wall(t_cast_state *state, t_intersection intersection)
 {

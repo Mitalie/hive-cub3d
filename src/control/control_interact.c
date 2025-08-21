@@ -1,6 +1,10 @@
 #include "control.h"
 
+#include <stdbool.h>
+#include <stddef.h>
+
 #include "cub3d.h"
+#include "map.h"
 
 /*
 	If door is opening (t < 0.5), no change.

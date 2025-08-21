@@ -6,6 +6,7 @@
 # include <stdbool.h>
 
 # include "cub3d.h"
+# include "map.h"
 # include "vec2.h"
 
 typedef struct s_intersection

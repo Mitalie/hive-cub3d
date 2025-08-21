@@ -1,14 +1,12 @@
 #include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include <stdio.h>
 #include <sys/time.h>
 #include "MLX42/MLX42.h"
 
 #include "cub3d.h"
 #include "hooks.h"
 #include "enemy.h"
-#include "input.h"
 #include "map.h"
 #include "minimap.h"
 #include "render.h"

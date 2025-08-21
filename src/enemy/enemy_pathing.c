@@ -1,10 +1,12 @@
-#define _GNU_SOURCE
 #include "enemy_internal.h"
 #include "enemy.h"
 
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
+
+#include "cub3d.h"
+#include "map.h"
 
 /*
 	A* search algorithm for 4-way grid movement, with true straight-line

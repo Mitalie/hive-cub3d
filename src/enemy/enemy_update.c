@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "cub3d.h"
+#include "map.h"
 
 #define ANIM_DURATION 2.0f
 

@@ -1,6 +1,8 @@
 #ifndef ENEMY_INTERNAL_H
 # define ENEMY_INTERNAL_H
 
+# include "enemy.h"
+
 # include <stdbool.h>
 # include <stdint.h>
 

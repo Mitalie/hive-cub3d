@@ -1,9 +1,12 @@
 #ifndef CAST_H
 # define CAST_H
 
-# include "cub3d.h"
+# include <stddef.h>
+
 # include "material.h"
 # include "vec2.h"
+
+typedef struct s_cub3d	t_cub3d;
 
 typedef enum e_side
 {

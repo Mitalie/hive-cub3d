@@ -3,9 +3,9 @@
 
 #include <math.h>
 #include <stdbool.h>
-#include <stdint.h>
 
 #include "cub3d.h"
+#include "map.h"
 
 static bool	cross_x(t_cast_state *state)
 {

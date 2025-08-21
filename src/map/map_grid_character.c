@@ -1,4 +1,5 @@
 #include "map_internal.h"
+#include "map.h"
 
 #include <math.h>
 #include <stdbool.h>

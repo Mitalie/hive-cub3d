@@ -1,8 +1,11 @@
 #include "control.h"
 
 #include <math.h>
+#include <stdbool.h>
+#include "MLX42/MLX42.h"
 
 #include "cub3d.h"
+#include "map.h"
 #include "vec2.h"
 
 #define WALL_COLL_DIST 0.125f

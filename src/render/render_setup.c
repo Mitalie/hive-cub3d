@@ -1,5 +1,6 @@
 #include "render.h"
 
+#include <stdbool.h>
 #include "MLX42/MLX42.h"
 
 #include "cub3d.h"

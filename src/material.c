@@ -1,10 +1,13 @@
+#include "material.h"
+
 #include <math.h>
+#include <stddef.h>
 #include <stdint.h>
 #include "MLX42/MLX42.h"
 
-#include "cast.h"
 #include "color.h"
 #include "cub3d.h"
+#include "map.h"
 
 static mlx_texture_t	*material_to_texture(t_cub3d *cub3d,
 	t_material material)

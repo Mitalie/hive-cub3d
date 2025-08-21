@@ -1,6 +1,7 @@
 #include "minimap.h"
 
 #include <math.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include "MLX42/MLX42.h"
 

@@ -1,5 +1,7 @@
 #include "util.h"
 
+#include <stdint.h>
+
 /*
 	Pass zero for seed to not reseed.
 	Uses Linear Congruential Generator algorithm.

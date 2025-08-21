@@ -1,6 +1,12 @@
 #include "cast_internal.h"
+#include "cast.h"
 
+#include <stddef.h>
+
+#include "enemy.h"
+#include "material.h"
 #include "util.h"
+#include "vec2.h"
 
 static t_hit	*cast_insert_transparent(t_cast_result *cr, float distance)
 {

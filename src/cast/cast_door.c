@@ -6,6 +6,7 @@
 
 #include "cub3d.h"
 #include "map.h"
+#include "material.h"
 
 static bool	cast_door_edge_ns(t_cast_state *state, t_hit *hit, float door_state)
 {
