@@ -81,6 +81,8 @@ int	main(int argc, char **argv)
 		cub3d.hfov_deg = 90;
 		cub3d.player.x = cub3d.map.player_x + 0.5;
 		cub3d.player.y = cub3d.map.player_y + 0.5;
+		if (cub3d.map.features & FEAT_ENEMY)
+			cub3d.player.y += 0.45f;
 		cub3d.player_facing = initial_facing(cub3d.map.player_start);
 		cub3d.enemy.pos.x = cub3d.map.enemy_start_x + 0.5f;
 		cub3d.enemy.pos.y = cub3d.map.enemy_start_y + 0.5f;

@@ -6,7 +6,15 @@
 #include "cub3d.h"
 #include "map.h"
 
-#define ANIM_DURATION 2.0f
+/*
+	Animation was designed with 0.2s pre-jump crouch, total 0.6s of jump,
+	flight, and landing, and another 0.2s straightening out of the landing
+	crouch. To make the duck a bit faster without making the animation look
+	unnaturally sped up, we skip the crouch/straighten and just go straight
+	into next jump with 0.6s interval.
+*/
+#define ANIM_START_OFFSET 0.2f
+#define ANIM_DURATION 0.6f
 
 /*
 	We expect enemy_pathing to update anim_end_pos to the next tile along the
@@ -40,6 +48,7 @@ void	enemy_update(t_cub3d *cub3d)
 		enemy_update_anim(cub3d);
 		anim_time = cub3d->frame_timestamp - cub3d->enemy.anim_start_time;
 	}
+	anim_time += ANIM_START_OFFSET;
 	move = enemy_anim_move_x(anim_time);
 	cub3d->enemy.pos.x = (1 - move) * cub3d->enemy.anim_start_pos.x
 		+ move * cub3d->enemy.anim_end_pos.x;
