@@ -44,12 +44,18 @@ SRCS := $(addprefix $(SRCDIR)/,\
 	vec2.c \
 )
 
+# Optimization flags
+OPT_FLAGS := -O3 -flto
+MLX42_OPT_FLAGS := -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=1
+
 # MLX42
 MLX42 := mlx42/build/libmlx42.a
 INCDIRS += mlx42/include
 MLX42LIBS := -lglfw
 ifdef DEBUG
 	MLX42_FLAGS = -DDEBUG=1
+else
+	MLX42_FLAGS = $(MLX42_OPT_FLAGS)
 endif
 $(MLX42): mlx42-make
 	cmake mlx42 -B mlx42/build $(MLX42_FLAGS)
@@ -92,6 +98,12 @@ def_CPPFLAGS := -MMD -MP $(addprefix -I ,$(INCDIRS))
 ifneq (,$(strip $(SANITIZE)))
 	def_CFLAGS += -fsanitize=$(SANITIZE)
 	def_LDFLAGS += -fsanitize=$(SANITIZE)
+endif
+
+# Add optimization flags unless debug requested
+ifndef DEBUG
+	def_CFLAGS += $(OPT_FLAGS)
+	def_LDFLAGS += $(OPT_FLAGS)
 endif
 
 # Combine default def_FLAGS, target specific tgt_FLAGS and user-supplied FLAGS
