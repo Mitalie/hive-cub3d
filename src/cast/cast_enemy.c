@@ -20,7 +20,7 @@ static t_hit	*cast_insert_transparent(t_cast_result *cr, float distance)
 		&& distance > cr->transparent[index].distance)
 		index++;
 	slot = &cr->transparent[index];
-	util_memmove(slot + 1, slot, sizeof(*slot) * cr->num_transparent - index);
+	util_memmove(slot + 1, slot, sizeof(*slot) * (cr->num_transparent - index));
 	cr->num_transparent++;
 	return (slot);
 }
